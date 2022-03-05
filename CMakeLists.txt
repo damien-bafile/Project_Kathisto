@@ -13,7 +13,7 @@ add_subdirectory(src)
 
 
 # Add source to this project's executable.
-add_executable(Project_Kathisto ${SOURCES} "src/main.c")
+add_executable(Project_Kathisto ${SOURCES})
 
 add_subdirectory(lib)
 
