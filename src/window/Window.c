@@ -39,6 +39,9 @@ void windowRender(void)
 	// GROUND RENDER
 	groundRender(deltaTime);
 
+	// RENDER EXAMPLE CUBE
+	cubeRender(deltaTime);
+
 	// ======================================= \\
 
 

@@ -11,17 +11,17 @@
 #include "game/GameConstants.h"
 
 
-// position of each of the ground points
-extern const Vector3 groundVertexBuffer[];
+// position of each of the cube points
+extern const Vector3 cubeVertexBuffer[];
 
 // index buffer on how to draw the points
-extern const Vector3Int groundIndexBuffer[];
+extern const Vector3Int cubeIndexBuffer[];
 
 // simple RGBA color buffer
-extern const RGBA groundColorsBuffer[];
+extern const RGBA cubeColorBuffer[];
 
 // create the mesh
-extern Mesh groundMesh;
+extern Mesh cubeMesh;
 
 // method to be placed in windowRender
-void groundRender(float deltaTime);
+void cubeRender(float deltaTime);

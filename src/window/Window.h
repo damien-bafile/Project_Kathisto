@@ -7,6 +7,7 @@
 #include "Events.h"
 #include "game/GameObjects/Camera.h"
 #include "game/GameObjects/Ground.h"
+#include "game/GameObjects/Cube.h"
 #include "game/Game.h"
 #include "math/Vector.h"
 
