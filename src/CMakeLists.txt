@@ -1,7 +1,10 @@
 set(SOURCES
     src/main.c
-    src/math/Vector.h
-    src/math/Vector.c
-
 
     PARENT_SCOPE)
+
+
+add_subdirectory(math)
+add_subdirectory(game)
+add_subdirectory(window)
+

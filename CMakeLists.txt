@@ -11,7 +11,6 @@ find_package(OpenGL REQUIRED)
 
 add_subdirectory(src)
 
-
 # Add source to this project's executable.
 add_executable(Project_Kathisto ${SOURCES})
 
