@@ -17,7 +17,7 @@ const float UP_SPEED = 10.0f;
 Vector3 cameraForwardDir = { 0.0f, 0.0f, -1.0f };
 Vector3 cameraPos = { 0.0f, 1.0f, 5.0f };
 Vector3 cameraUp = { 0.0f, 1.0f, 0.0f };
-Vector3 cameraDeltaPos = { 0.0f, 0.0f, 0.0f };
+Vector3 moveDir = { 0.0f, 0.0f, 0.0f };
 
 Vector2 mousePos = { 0.0f, 0.0f };
 Vector2 mouseDeltaPos = { 0.0f, 0.0f };
@@ -30,20 +30,20 @@ int currTime = 0;
 float prevTime = 0.0f;
 float deltaTime = 0.0f;
 
-void reshapeWindow(int width, int height);
-void render(void);
+void reshapeWindow(int width, int height); // called when window gets resized
+void calculateDeltaTime(); // calculate the delta time
+void render(void); // called every frame
 
-void onKeyDown(unsigned char key, int xx, int yy);
-void onKeyUp(unsigned char key, int xx, int yy);
+void onKeyDown(unsigned char key, int x, int y); // on key down
+void onKeyUp(unsigned char key, int x, int y); // on key up
 
-void onSpecialKeyDown(int key, int xx, int yy);
-void onSpecialKeyUp(int key, int xx, int yy);
+void onSpecialKeyDown(int key, int x, int y); // on special key up
+void onSpecialKeyUp(int key, int x, int y); // on special key up
 
-void onMouseButton(int button, int state, int xx, int yy);
-void onMouseMove(int xx, int yy);
+void onMouseButton(int button, int state, int x, int y); // on mouse buttons
+void onMouseMove(int x, int y); // on mouse move
 
-void computeCameraPos();
-
+void computeCameraPos(); // compute the position of the camera
 
 int main(int argc, char** argv)
 {
@@ -96,11 +96,10 @@ int main(int argc, char** argv)
 
 void render(void)
 {
-	// get the current delta time (time since last frame)
-	currTime = glutGet(GLUT_ELAPSED_TIME);
-	deltaTime = (currTime - prevTime) / 1000.0f;
-	prevTime = currTime;
+	// calculate delta time (time since last frame)
+	calculateDeltaTime();
 
+	// compute the cameras position you can move
 	computeCameraPos();
 
 	// clear the color and depth buffer
@@ -137,7 +136,14 @@ void render(void)
 	glutSwapBuffers();
 }
 
-// Called when the window gets resized
+void calculateDeltaTime()
+{
+	// get the current delta time (time since last frame)
+	currTime = glutGet(GLUT_ELAPSED_TIME);
+	deltaTime = (currTime - prevTime) / 1000.0f;
+	prevTime = currTime;
+}
+
 void reshapeWindow(int width, int height)
 {
 	// if height is 0 then set it 1
@@ -172,22 +178,22 @@ void onKeyDown(unsigned char key, int x, int y)
 
 	switch (key) {
 	case 'w':
-		cameraDeltaPos.z = 1.0f;
+		moveDir.z = 1.0f;
 		break;
 	case 'a':
-		cameraDeltaPos.x = -1.0f;
+		moveDir.x = -1.0f;
 		break;
 	case 's':
-		cameraDeltaPos.z = -1.0f;
+		moveDir.z = -1.0f;
 		break;
 	case 'd':
-		cameraDeltaPos.x = 1.0f;
+		moveDir.x = 1.0f;
 		break;
 	case ' ':
-		cameraDeltaPos.y = 1.0f;
+		moveDir.y = 1.0f;
 		break;
 	case 'z':
-		cameraDeltaPos.y = -1.0f;
+		moveDir.y = -1.0f;
 		break;
 	case 27:
 		exit(0);
@@ -199,22 +205,22 @@ void onKeyUp(unsigned char key, int x, int y)
 {
 	switch (key) {
 	case 'w':
-		cameraDeltaPos.z = 0.0f;
+		moveDir.z = 0.0f;
 		break;
 	case 'a':
-		cameraDeltaPos.x = 0.0f;
+		moveDir.x = 0.0f;
 		break;
 	case 's':
-		cameraDeltaPos.z = 0.0f;
+		moveDir.z = 0.0f;
 		break;
 	case 'd':
-		cameraDeltaPos.x = 0.0f;
+		moveDir.x = 0.0f;
 		break;
 	case ' ':
-		cameraDeltaPos.y = 0.0f;
+		moveDir.y = 0.0f;
 		break;
 	case 'z':
-		cameraDeltaPos.y = 0.0f;
+		moveDir.y = 0.0f;
 		break;
 	}
 }
@@ -227,7 +233,7 @@ void onSpecialKeyUp(int key, int x, int y)
 {
 }
 
-void onMouseButton(int button, int state, int xx, int yy)
+void onMouseButton(int button, int state, int x, int y)
 {
 }
 
@@ -240,10 +246,11 @@ void onMouseMove(int x, int y)
 	mouseDeltaPos.y = (y - (WINDOW_WIDTH / 2)) * MOUSE_SENS;
 
 	// update camera's direction
-	cameraForwardDir.x = sin(mousePos.x + mouseDeltaPos.x);
-	cameraForwardDir.y = -tan(mousePos.y + mouseDeltaPos.y);
-	cameraForwardDir.z = -cos(mousePos.x + mouseDeltaPos.x);
+	cameraForwardDir.x = sin(mousePos.x + mouseDeltaPos.x);  // left/right
+	cameraForwardDir.y = -tan(mousePos.y + mouseDeltaPos.y); // up/down
+	cameraForwardDir.z = -cos(mousePos.x + mouseDeltaPos.x); // forward/back
 
+	// increase the mouse pos by the delta mouse pos
 	mousePos.x += mouseDeltaPos.x;
 	mousePos.y += mouseDeltaPos.y;
 
@@ -251,16 +258,26 @@ void onMouseMove(int x, int y)
 
 void computeCameraPos()
 {
-	Vector3 newPos;
-	newPos = Vec3ScalarMultiply(cameraForwardDir, cameraDeltaPos.z * (WALK_SPEED * deltaTime));
+	// REMEMBER: multiplying by delta time helps create smooth movement
+
+	// calculate the forward/back position
+	// new pos = the cams forward dir * (the forward move direction * walk speed)
+	Vector3 newPos = Vec3ScalarMultiply(cameraForwardDir, moveDir.z * (WALK_SPEED * deltaTime));
+	// change camera's position
 	cameraPos.x += newPos.x;
 	cameraPos.y += newPos.y;
 	cameraPos.z += newPos.z;
 
-	newPos = Vec3ScalarMultiply(Vec3Normalize(Vec3CrossProduct(cameraForwardDir, cameraUp)), cameraDeltaPos.x * (WALK_SPEED * deltaTime));
+	// calculate the left/right position
+	// a normalised vectors values are between 0 and 1.
+	// a cross product of 2 vectors is a perpendicular vector
+	// new pos = normalised (cross product of cameraForward pos and Camera Up) * the move left move direction * walk speed)
+	newPos = Vec3ScalarMultiply(Vec3Normalize(Vec3CrossProduct(cameraForwardDir, cameraUp)), moveDir.x * (WALK_SPEED * deltaTime));
 	cameraPos.x += newPos.x;
 	cameraPos.y += newPos.y;
 	cameraPos.z += newPos.z;
 
-	cameraPos.y += cameraDeltaPos.y * (UP_SPEED * deltaTime);
+	// calculate the up/down position
+	cameraPos.y += moveDir.y * (UP_SPEED * deltaTime);
+
 }
