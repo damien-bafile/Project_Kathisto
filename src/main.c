@@ -9,10 +9,18 @@
 int WINDOW_WIDTH = 750;
 int WINDOW_HEIGHT = 750;
 
+const float MOUSE_SENS = 0.001f;
+const float WALK_SPEED = 15.0f;
+const float UP_SPEED = 10.0f;
+
+
 Vector3 cameraForwardDir = { 0.0f, 0.0f, -1.0f };
 Vector3 cameraPos = { 0.0f, 1.0f, 5.0f };
 Vector3 cameraUp = { 0.0f, 1.0f, 0.0f };
 Vector3 cameraDeltaPos = { 0.0f, 0.0f, 0.0f };
+
+Vector2 mousePos = { 0.0f, 0.0f };
+Vector2 mouseDeltaPos = { 0.0f, 0.0f };
 
 int frame = 0;
 int timebase = 0;
@@ -50,6 +58,22 @@ int main(int argc, char** argv)
 	glutDisplayFunc(render);
 	glutIdleFunc(render);
 
+	// keyboard and mouse input
+	glutKeyboardFunc(onKeyDown); // on key down
+	glutKeyboardUpFunc(onKeyUp); // on key up
+
+	glutSpecialFunc(onSpecialKeyDown); // on special key down (function keys, ctrl etc)
+	glutSpecialUpFunc(onSpecialKeyUp); // on special key up
+
+	glutIgnoreKeyRepeat(1); // ignore auto repeat keystrokes so it doesnt constantly fire key up and key down
+
+
+	glutMouseFunc(onMouseButton); // on mouse click
+	glutPassiveMotionFunc(onMouseMove); // ALWAYS MOVING
+
+	// hide the cursor
+	glutSetCursor(GLUT_CURSOR_NONE);
+
 	// enable depth testing
 	glEnable(GL_DEPTH_TEST);
 
@@ -85,7 +109,7 @@ void render(void)
 	glVertex3f(1.0f, 0.0f, 1.0f); // point 2
 	glVertex3f(0.0f, 1.0f, 1.0f); // point 3
 	glEnd();
-	
+
 	//Draw ground
 	//glColor3f(0.7f, 0.7f, 0.7f);
 	//glBegin(GL_QUADS);
@@ -128,4 +152,87 @@ void reshapeWindow(int width, int height)
 
 	// set the matrix mode back to model view
 	glMatrixMode(GL_MODELVIEW);
+}
+
+
+void onKeyDown(unsigned char key, int x, int y)
+{
+
+	switch (key) {
+	case 'w':
+		cameraDeltaPos.z = 1.0f;
+		break;
+	case 'a':
+		cameraDeltaPos.x = -1.0f;
+		break;
+	case 's':
+		cameraDeltaPos.z = -1.0f;
+		break;
+	case 'd':
+		cameraDeltaPos.x = 1.0f;
+		break;
+	case ' ':
+		cameraDeltaPos.y = 1.0f;
+		break;
+	case 'z':
+		cameraDeltaPos.y = -1.0f;
+		break;
+	case 27:
+		exit(0);
+		break;
+	}
+}
+
+void onKeyUp(unsigned char key, int x, int y)
+{
+	switch (key) {
+	case 'w':
+		cameraDeltaPos.z = 0.0f;
+		break;
+	case 'a':
+		cameraDeltaPos.x = 0.0f;
+		break;
+	case 's':
+		cameraDeltaPos.z = 0.0f;
+		break;
+	case 'd':
+		cameraDeltaPos.x = 0.0f;
+		break;
+	case ' ':
+		cameraDeltaPos.y = 0.0f;
+		break;
+	case 'z':
+		cameraDeltaPos.y = 0.0f;
+		break;
+	}
+}
+
+void onSpecialKeyDown(int key, int x, int y)
+{
+}
+
+void onSpecialKeyUp(int key, int x, int y)
+{
+}
+
+void onMouseButton(int button, int state, int xx, int yy)
+{
+}
+
+void onMouseMove(int x, int y)
+{
+	glutWarpPointer(WINDOW_WIDTH / 2, WINDOW_WIDTH / 2);
+
+	// update mouse deltas
+	mouseDeltaPos.x = (x - (WINDOW_WIDTH / 2)) * MOUSE_SENS;
+	mouseDeltaPos.y = (y - (WINDOW_WIDTH / 2)) * MOUSE_SENS;
+
+	// update camera's direction
+	cameraForwardDir.x = sin(mousePos.x + mouseDeltaPos.x);
+	cameraForwardDir.y = -tan(mousePos.y + mouseDeltaPos.y);
+	cameraForwardDir.z = -cos(mousePos.x + mouseDeltaPos.x);
+
+	mousePos.x += mouseDeltaPos.x;
+	mousePos.y += mouseDeltaPos.y;
+
 }
