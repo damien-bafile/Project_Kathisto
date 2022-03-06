@@ -28,4 +28,4 @@ void reshapeWindow(int width, int height);
 void windowRender(void); 
 
 // initialise the window with a name
-void initialiseWindow(int argc, char** argv, char** windowName);
+void initialiseWindow(int argc, char** argv, char* windowName);

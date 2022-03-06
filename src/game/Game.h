@@ -18,7 +18,7 @@ typedef struct Mesh
 	Vector3* points;
 	int pointCount;
 	int* indices;
-	float* colors;
+	RGBA* colors;
 	bool isUniformColor;
 } Mesh;
 

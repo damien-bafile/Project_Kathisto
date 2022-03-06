@@ -28,10 +28,12 @@ typedef struct RGBA
 
 Vector2 ArrayToVec2(const float arr[2]);
 Vector3 ArrayToVec3(const float arr[3]);
+RGBA ArrayToRGBA(const float arr[4]);
 
 float* Vec2ToArray(const Vector2 vec);
 float* Vec3ToArray(const Vector3 vec);
 float* RGBAToArray(const RGBA vec);
+float* RGBAArrayToArray(const RGBA* vecArr, size_t length);
 
 float Vec2Length(Vector2 vec);
 float Vec3Length(Vector3 vec);

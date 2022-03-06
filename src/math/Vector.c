@@ -11,6 +11,11 @@ Vector3 ArrayToVec3(const float arr[3])
 	return (Vector3) { arr[0], arr[1], arr[2] };
 }
 
+RGBA ArrayToRGBA(const float arr[4])
+{
+	return (RGBA) { arr[0], arr[1], arr[2], arr[3] };
+}
+
 float* Vec2ToArray(const Vector2 vec)
 {
 	float* arr = malloc(2 * sizeof(float));
@@ -48,6 +53,23 @@ float* RGBAToArray(const RGBA vec)
 		arr[3] = vec.a;
 	}
 
+	return arr;
+}
+
+float* RGBAArrayToArray(const RGBA* vecArr, size_t length)
+{
+	if (length <= 0) length = 1;
+	float* arr = malloc(4 * length * sizeof(float));
+	if (arr != NULL)
+	{
+		for (size_t i = 0; i < length; i++)
+		{
+			arr[0 + (i * 4)] = vecArr[i].r;
+			arr[1 + (i * 4)] = vecArr[i].g;
+			arr[2 + (i * 4)] = vecArr[i].b;
+			arr[3 + (i * 4)] = vecArr[i].a;
+		}
+	}
 	return arr;
 }
 

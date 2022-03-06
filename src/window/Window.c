@@ -1,5 +1,6 @@
 #include "Window.h"
 #include <game/Game.h>
+#include "math/Vector.h"
 
 int WINDOW_WIDTH = 750;
 int WINDOW_HEIGHT = 750;
@@ -78,35 +79,22 @@ void windowRender(void)
 		6, 7, 3
 	};
 
-	//const RGBA colors[] =
-	//{
-	//	// front colors
-	//	{1.0, 0.0, 0.0, 1.0f},
-	//	{0.0, 1.0, 0.0, 1.0f},
-	//	{0.0, 0.0, 1.0, 1.0f},
-	//	{1.0, 1.0, 1.0, 1.0f},
-	//	// back colors
-	//			{1.0, 0.0, 0.0, 1.0f},
-	//			{0.0, 1.0, 0.0, 1.0f},
-	//			{0.0, 0.0, 1.0, 1.0f},
-	//			{1.0, 1.0, 1.0, 1.0f}
-	//};
 
-	const float colors[] =
+	const RGBA colors[] =
 	{
 		// front colors
-		1.0, 0.0, 0.0, 1.0,
-		0.0, 1.0, 0.0, 1.0,
-		0.0, 0.0, 1.0, 1.0,
-		1.0, 1.0, 1.0, 1.0,
+		{1.0, 0.0, 0.0, 1.0f},
+		{0.0, 1.0, 0.0, 1.0f},
+		{0.0, 0.0, 1.0, 1.0f},
+		{1.0, 1.0, 1.0, 1.0f},
 		// back colors
-		1.0, 0.0, 0.0, 1.0,
-		0.0, 1.0, 0.0, 1.0,
-		0.0, 0.0, 1.0, 1.0,
-		1.0, 1.0, 1.0, 1.0
+		{1.0, 0.0, 0.0, 1.0f},
+		{0.0, 1.0, 0.0, 1.0f},
+		{0.0, 0.0, 1.0, 1.0f},
+		{1.0, 1.0, 1.0, 1.0f}
 	};
 
-	Mesh mesh = { .points = vecArr, .indices = indices, .pointCount = 36, .colors = colors, .isUniformColor = true };
+	Mesh mesh = { .points = vecArr, .indices = indices, .pointCount = 36, .colors = colors, .isUniformColor = false };
 	drawMesh(mesh);
 
 	//Draw ground
@@ -154,7 +142,7 @@ void reshapeWindow(int width, int height)
 	glMatrixMode(GL_MODELVIEW);
 }
 
-void initialiseWindow(int argc, char** argv, char** windowName)
+void initialiseWindow(int argc, char** argv, char* windowName)
 {
 	// initialise GLUT, with debug logs
 	glutInit(&argc, argv);

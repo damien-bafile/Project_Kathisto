@@ -5,7 +5,7 @@ void drawMesh(Mesh mesh)
     if(!mesh.isUniformColor) glEnableClientState(GL_COLOR_ARRAY);
 
     if (mesh.isUniformColor) 
-        glColor4f(mesh.colors[0], mesh.colors[1], mesh.colors[2], mesh.colors[3]);
+        glColor4f(mesh.colors[0].r, mesh.colors[0].g, mesh.colors[0].b, mesh.colors[0].a);
     else
         glColorPointer(4, GL_FLOAT, 4, mesh.colors);
 
