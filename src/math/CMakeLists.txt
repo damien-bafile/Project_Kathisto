@@ -1,4 +1,4 @@
-list(APPEND SOURCES
+set(MATH
    src/math/Vector.h
    src/math/Vector.c
 

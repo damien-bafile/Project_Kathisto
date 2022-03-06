@@ -1,6 +1,5 @@
-list(APPEND SOURCES
+set(WINDOW
    src/window/Window.h
    src/window/Window.c
-
     PARENT_SCOPE)
 
