@@ -37,67 +37,7 @@ void windowRender(void)
 	// CAMERA RENDER
 	cameraRender(deltaTime);
 
-	// draw a basic purple triangle
-	//glColor3f(0.6f, 0.25f, 0.65f);
-	//glBegin(GL_POLYGON); // set mode to drawing in triangles
-	//glVertex3f(1.0f, 1.0f, 1.0f); // point 1
-	//glVertex3f(1.0f, 0.0f, 1.0f); // point 2
-	//glVertex3f(0.0f, 1.0f, 1.0f); // point 3
-	//glEnd();
-
-	const Vector3 vecArr[] = {
-		// front
-		{ -1.0, -1.0,  1.0},
-		{1.0, -1.0,  1.0 },
-		{1.0,  1.0,  1.0},
-		{-1.0,  1.0,  1.0},
-		// back
-		{-1.0, -1.0, -1.0},
-		{ 1.0, -1.0, -1.0},
-		{ 1.0,  1.0, -1.0},
-		{-1.0,  1.0, -1.0}
-	};
-
-	const Vector3Int indices[] = {
-		// front
-		{0, 1, 2},
-		{2, 3, 0},
-		// right
-		{1, 5, 6},
-		{6, 2, 1},
-		// back
-		{7, 6, 5},
-		{5, 4, 7},
-		// left
-		{4, 0, 3},
-		{3, 7, 4},
-		// bottom
-		{4, 5, 1},
-		{1, 0, 4},
-		// top
-		{3, 2, 6},
-		{6, 7, 3}
-	};
-
-
-	const RGBA colors[] =
-	{
-		// front colors
-		{1.0, 0.0, 0.0, 1.0f},
-		{0.0, 1.0, 0.0, 1.0f},
-		{0.0, 0.0, 1.0, 1.0f},
-		{1.0, 1.0, 1.0, 1.0f},
-		// back colors
-		{1.0, 0.0, 0.0, 1.0f},
-		{0.0, 1.0, 0.0, 1.0f},
-		{0.0, 0.0, 1.0, 1.0f},
-		{1.0, 1.0, 1.0, 1.0f}
-	};
-
-	Mesh mesh = { .points = vecArr, .indices = indices, .indexCount = 36, .colors = colors, .isUniformColor = false };
-	drawMesh(mesh);
-
-
+	// position of each of the ground points
 	const Vector3 groundVertexBuffer[] =
 	{
 		{-100.0f, 0.0f, -100.0f},
@@ -106,12 +46,17 @@ void windowRender(void)
 		{100.0f, 0.0f, -100.0f},
 	};
 
+	// index buffer on how to  the points
 	const Vector3Int groundIndexBuffer[] =
 	{
 		{0, 1, 2},
 		{2, 3, 0}
 	};
+	
+	// simple RGBA color buffer
 	const RGBA groundColorsBuffer[] = { {0.7f, 0.7f, 0.7f, 1.0f} };
+
+	// create the mesh
 	Mesh groundMesh = { 
 		.points = groundVertexBuffer, 
 		.indices = groundIndexBuffer, 
@@ -119,6 +64,8 @@ void windowRender(void)
 		.colors = groundColorsBuffer, 
 		.isUniformColor = true };
 
+
+	// draw the mesh
 	drawMesh(groundMesh);
 
 	// ======================================= \\
