@@ -2,12 +2,10 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <GL/glut.h>
-#include <GL/freeglut_ext.h>
+#include <GL/freeglut.h>
 
-#include "math/Vector.h"
-#include "game/Player.h"
-
+#include "Events.h"
+#include "game/GameObjects/Camera.h"
 
 extern int WINDOW_WIDTH;
 extern int WINDOW_HEIGHT;
@@ -20,15 +18,14 @@ extern int currTime;
 extern float prevTime;
 extern float deltaTime;
 
-void reshapeWindow(int width, int height); // called when window gets resized
-void calculateDeltaTime(); // calculate the delta time
-void windowRender(void); // called every frame
+// calculate the delta time
+void calculateDeltaTime(); 
 
-void onKeyDown(unsigned char key, int x, int y); // on key down
-void onKeyUp(unsigned char key, int x, int y); // on key up
+// called when window gets resized
+void reshapeWindow(int width, int height); 
 
-void onSpecialKeyDown(int key, int x, int y); // on special key up
-void onSpecialKeyUp(int key, int x, int y); // on special key up
+// called every frame
+void windowRender(void); 
 
-void onMouseButton(int button, int state, int x, int y); // on mouse buttons
-void onMouseMove(int x, int y); // on mouse move
+// initialise the window with a name
+void initialiseWindow(int argc, char** argv, char** windowName);

@@ -11,25 +11,29 @@ int currTime = 0;
 float prevTime = 0.0f;
 float deltaTime = 0.0f;
 
+
+void calculateDeltaTime()
+{
+	// get the current delta time (time since last frame)
+	currTime = glutGet(GLUT_ELAPSED_TIME);
+	deltaTime = (currTime - prevTime) / 1000.0f;
+	prevTime = currTime;
+}
+
 void windowRender(void)
 {
 	// calculate delta time (time since last frame)
 	calculateDeltaTime();
 
-	// compute the cameras position you can move
-	computeCameraPos();
-
-	// clear the color and depth buffer
+		// clear the color and depth buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// resets transformations
 	glLoadIdentity();
 
-	// Cam Position and rotation
-	gluLookAt(cameraPos.x, cameraPos.y, cameraPos.z,
-		cameraPos.x + cameraForwardDir.x, cameraPos.y + cameraForwardDir.y, cameraPos.z + cameraForwardDir.z,
-		cameraUp.x, cameraUp.y, cameraUp.z);
-
+	
+	// CAMERA RENDER
+	cameraRender();
 
 	// draw a basic purple triangle
 	glColor3f(0.6f, 0.25f, 0.65f);
@@ -51,14 +55,6 @@ void windowRender(void)
 
 	// swap the buffers
 	glutSwapBuffers();
-}
-
-void calculateDeltaTime()
-{
-	// get the current delta time (time since last frame)
-	currTime = glutGet(GLUT_ELAPSED_TIME);
-	deltaTime = (currTime - prevTime) / 1000.0f;
-	prevTime = currTime;
 }
 
 void reshapeWindow(int width, int height)
@@ -90,85 +86,49 @@ void reshapeWindow(int width, int height)
 	glMatrixMode(GL_MODELVIEW);
 }
 
-void onKeyDown(unsigned char key, int x, int y)
+void initialiseWindow(int argc, char** argv, char** windowName)
 {
+	// initialise GLUT, with debug logs
+	glutInit(&argc, argv);
+	glutInitContextFlags(GLUT_DEBUG);
 
-	switch (key) {
-	case 'w':
-		moveDir.z = 1.0f;
-		break;
-	case 'a':
-		moveDir.x = -1.0f;
-		break;
-	case 's':
-		moveDir.z = -1.0f;
-		break;
-	case 'd':
-		moveDir.x = 1.0f;
-		break;
-	case ' ':
-		moveDir.y = 1.0f;
-		break;
-	case 'z':
-		moveDir.y = -1.0f;
-		break;
-	case 27:
-		exit(0);
-		break;
-	}
-}
+	// set RGBA mode, double buffer window, and have a depth buffer
+	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 
-void onKeyUp(unsigned char key, int x, int y)
-{
-	switch (key) {
-	case 'w':
-		moveDir.z = 0.0f;
-		break;
-	case 'a':
-		moveDir.x = 0.0f;
-		break;
-	case 's':
-		moveDir.z = 0.0f;
-		break;
-	case 'd':
-		moveDir.x = 0.0f;
-		break;
-	case ' ':
-		moveDir.y = 0.0f;
-		break;
-	case 'z':
-		moveDir.y = 0.0f;
-		break;
-	}
-}
+	// set the window starting position and size
+	glutInitWindowPosition(200, 200);
+	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 
-void onSpecialKeyDown(int key, int x, int y)
-{
-}
+	// set window name
+	glutCreateWindow(windowName);
 
-void onSpecialKeyUp(int key, int x, int y)
-{
-}
+	// callback functions
 
-void onMouseButton(int button, int state, int x, int y)
-{
-}
+	// on reshape
+	glutReshapeFunc(reshapeWindow);
 
-void onMouseMove(int x, int y)
-{
-	glutWarpPointer(WINDOW_WIDTH / 2, WINDOW_WIDTH / 2);
+	// rendering callbacks
+	glutDisplayFunc(windowRender);
+	glutIdleFunc(windowRender);
 
-	// update mouse deltas
-	mouseDeltaPos.x = (x - (WINDOW_WIDTH / 2)) * MOUSE_SENS;
-	mouseDeltaPos.y = (y - (WINDOW_WIDTH / 2)) * MOUSE_SENS;
+	// keyboard and mouse input
+	glutKeyboardFunc(onKeyDown); // on key down
+	glutKeyboardUpFunc(onKeyUp); // on key up
 
-	// update camera's direction
-	cameraForwardDir.x = sin(mousePos.x + mouseDeltaPos.x);  // left/right
-	cameraForwardDir.y = -tan(mousePos.y + mouseDeltaPos.y); // up/down
-	cameraForwardDir.z = -cos(mousePos.x + mouseDeltaPos.x); // forward/back
+	glutSpecialFunc(onSpecialKeyDown); // on special key down (function keys, ctrl etc)
+	glutSpecialUpFunc(onSpecialKeyUp); // on special key up
 
-	// increase the mouse pos by the delta mouse pos
-	mousePos.x += mouseDeltaPos.x;
-	mousePos.y += mouseDeltaPos.y;
+	glutIgnoreKeyRepeat(1); // ignore auto repeat keystrokes so it doesnt constantly fire key up and key down
 
+	glutMouseFunc(onMouseButton); // on mouse click
+	glutPassiveMotionFunc(onMouseMove); // ALWAYS MOVING
+
+	// hide the cursor
+	glutSetCursor(GLUT_CURSOR_NONE);
+
+	// enable depth testing
+	glEnable(GL_DEPTH_TEST);
+
+	// enter loop
+	glutMainLoop();
 }

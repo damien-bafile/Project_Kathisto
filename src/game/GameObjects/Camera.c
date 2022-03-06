@@ -1,8 +1,4 @@
-#include "Player.h"
-
-const float MOUSE_SENS = 0.001f;
-const float WALK_SPEED = 15.0f;
-const float UP_SPEED = 10.0f;
+#include "Camera.h"
 
 Vector3 cameraForwardDir = { 0.0f, 0.0f, -1.0f };
 Vector3 cameraPos = { 0.0f, 1.0f, 5.0f };
@@ -13,7 +9,7 @@ Vector2 mousePos = { 0.0f, 0.0f };
 Vector2 mouseDeltaPos = { 0.0f, 0.0f };
 
 
-void computeCameraPos()
+void computeCameraPos(float deltaTime)
 {
 	// REMEMBER: multiplying by delta time helps create smooth movement
 
@@ -38,3 +34,15 @@ void computeCameraPos()
 	cameraPos.y += moveDir.y * (UP_SPEED * deltaTime);
 
 }
+
+void cameraRender(float deltaTime)
+{
+	// compute the cameras position you can move
+	computeCameraPos(deltaTime);
+
+	// Cam Position and rotation
+	gluLookAt(cameraPos.x, cameraPos.y, cameraPos.z,
+		cameraPos.x + cameraForwardDir.x, cameraPos.y + cameraForwardDir.y, cameraPos.z + cameraForwardDir.z,
+		cameraUp.x, cameraUp.y, cameraUp.z);
+}
+
