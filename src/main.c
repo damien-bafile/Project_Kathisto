@@ -67,18 +67,20 @@ void render(void)
 		cameraUp.x, cameraUp.y, cameraUp.z);
 
 
-	////Draw ground
+	glColor3f(0.6f, 0.25f, 0.65f);
+	glBegin(GL_TRIANGLES);
+	glVertex3f(1.0f, 1.0f, 1.0f);
+	glVertex3f(1.0f, 0.0f, 1.0f);
+	glVertex3f(0.0f, 1.0f, 1.0f);
+	
+	//Draw ground
 	//glColor3f(0.7f, 0.7f, 0.7f);
-	//glBegin(GL_TRIANGLES);
-	//glVertex3f(1.0f, 0.0f, 0.0f);
-	//glVertex3f(1.0f, 1.0f, 0.0f);
-	//glVertex3f(-1.0f, 0.0f, 0.0f);
 	//glBegin(GL_QUADS);
 	//glVertex3f(-100.0f, 0.0f, -100.0f);
 	//glVertex3f(-100.0f, 0.0f, 100.0f);
 	//glVertex3f(100.0f, 0.0f, 100.0f);
 	//glVertex3f(100.0f, 0.0f, -100.0f);
-	//glEnd();
+	glEnd();
 
 
 	glutSwapBuffers();
