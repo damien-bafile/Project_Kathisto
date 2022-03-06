@@ -17,7 +17,7 @@ typedef struct Mesh
 	Vector3* points;
 	int pointCount;
 	int* indices;
-	RGBA* colors;
+	float* colors;
 } Mesh;
 
 void drawMesh(Mesh mesh);
