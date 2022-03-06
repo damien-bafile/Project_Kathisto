@@ -1,5 +1,6 @@
-list(APPEND SOURCES
-   src/game/Player.h
-   src/game/Player.c
-
-    PARENT_SCOPE)
+target_sources(myLib
+    PRIVATE
+        game/Player.c 
+    PUBLIC
+        game/Player.h
+)

@@ -1,6 +1,6 @@
-list(APPEND SOURCES
-   src/math/Vector.h
-   src/math/Vector.c
-
-    PARENT_SCOPE)
-
+target_sources(myLib
+    PRIVATE
+        math/Vector.c 
+    PUBLIC
+        math/Vector.h
+)

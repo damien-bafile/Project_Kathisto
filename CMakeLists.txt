@@ -11,11 +11,12 @@ find_package(OpenGL REQUIRED)
 
 add_subdirectory(src)
 
+target_compile_definitions(myLib PUBLIC)
+
 # Add source to this project's executable.
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 add_subdirectory(lib)
-
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy_directory

@@ -1,6 +1,6 @@
-list(APPEND SOURCES
-   src/window/Window.h
-   src/window/Window.c
-
-    PARENT_SCOPE)
-
+target_sources(myLib
+    PRIVATE
+        window/Window.c 
+    PUBLIC
+        window/Window.h
+)
