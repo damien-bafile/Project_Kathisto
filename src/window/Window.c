@@ -1,4 +1,5 @@
 #include "Window.h"
+#include <game/Game.h>
 
 int WINDOW_WIDTH = 750;
 int WINDOW_HEIGHT = 750;
@@ -36,21 +37,72 @@ void windowRender(void)
 	cameraRender(deltaTime);
 
 	// draw a basic purple triangle
-	glColor3f(0.6f, 0.25f, 0.65f);
-	glBegin(GL_POLYGON); // set mode to drawing in triangles
-	glVertex3f(1.0f, 1.0f, 1.0f); // point 1
-	glVertex3f(1.0f, 0.0f, 1.0f); // point 2
-	glVertex3f(0.0f, 1.0f, 1.0f); // point 3
-	glEnd();
+	//glColor3f(0.6f, 0.25f, 0.65f);
+	//glBegin(GL_POLYGON); // set mode to drawing in triangles
+	//glVertex3f(1.0f, 1.0f, 1.0f); // point 1
+	//glVertex3f(1.0f, 0.0f, 1.0f); // point 2
+	//glVertex3f(0.0f, 1.0f, 1.0f); // point 3
+	//glEnd();
+
+	Vector3 vecArr[] = {
+		// front
+		{ -1.0, -1.0,  1.0},
+		{1.0, -1.0,  1.0 },
+		{1.0,  1.0,  1.0},
+		{-1.0,  1.0,  1.0},
+		// back
+		{-1.0, -1.0, -1.0},
+		{ 1.0, -1.0, -1.0},
+		{ 1.0,  1.0, -1.0},
+		{-1.0,  1.0, -1.0}
+	};
+
+	const indices[] = {
+		// front
+		0, 1, 2,
+		2, 3, 0,
+		// right
+		1, 5, 6,
+		6, 2, 1,
+		// back
+		7, 6, 5,
+		5, 4, 7,
+		// left
+		4, 0, 3,
+		3, 7, 4,
+		// bottom
+		4, 5, 1,
+		1, 0, 4,
+		// top
+		3, 2, 6,
+		6, 7, 3
+	};
+
+	const RGBA colors[] =
+	{
+		// front colors
+		{1.0, 0.0, 0.0, 1.0f},
+		{0.0, 1.0, 0.0, 1.0f},
+		{0.0, 0.0, 1.0, 1.0f},
+		{1.0, 1.0, 1.0, 1.0f},
+		// back colors
+				{1.0, 0.0, 0.0, 1.0f},
+				{0.0, 1.0, 0.0, 1.0f},
+				{0.0, 0.0, 1.0, 1.0f},
+				{1.0, 1.0, 1.0, 1.0f}
+	};
+
+	Mesh mesh = { .points = vecArr, .indices = indices, .pointCount = 36, .colors = colors };
+	drawMesh(mesh);
 
 	//Draw ground
-	glColor3f(0.7f, 0.7f, 0.7f);
-	glBegin(GL_POLYGON);
-	glVertex3f(-100.0f, 0.0f, -100.0f);
-	glVertex3f(-100.0f, 0.0f, 100.0f);
-	glVertex3f(100.0f, 0.0f, 100.0f);
-	glVertex3f(100.0f, 0.0f, -100.0f);
-	glEnd();
+	//glColor3f(0.7f, 0.7f, 0.7f);
+	//glBegin(GL_POLYGON);
+	//glVertex3f(-100.0f, 0.0f, -100.0f);
+	//glVertex3f(-100.0f, 0.0f, 100.0f);
+	//glVertex3f(100.0f, 0.0f, 100.0f);
+	//glVertex3f(100.0f, 0.0f, -100.0f);
+	//glEnd();
 
 	// ======================================= \\
 

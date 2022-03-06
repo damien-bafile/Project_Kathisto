@@ -1,4 +1,7 @@
 #pragma once
+#include <stdlib.h>
+#include <stdio.h>
+#include <GL/freeglut.h>
 
 #include "math/Vector.h"
 
@@ -11,5 +14,10 @@ typedef struct Transform
 
 typedef struct Mesh
 {
-
+	Vector3* points;
+	int pointCount;
+	int* indices;
+	RGBA* colors;
 } Mesh;
+
+void drawMesh(Mesh mesh);
