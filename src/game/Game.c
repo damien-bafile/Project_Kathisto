@@ -12,7 +12,7 @@ void drawMesh(Mesh mesh)
     glEnableClientState(GL_VERTEX_ARRAY);
 
     glVertexPointer(3, GL_FLOAT, 0, mesh.points);
-    glDrawElements(GL_TRIANGLES, mesh.pointCount, GL_UNSIGNED_INT, mesh.indices);
+    glDrawElements(GL_TRIANGLES, mesh.indexCount, GL_UNSIGNED_INT, mesh.indices);
 
     glDisableClientState(GL_VERTEX_ARRAY);
    if(!mesh.isUniformColor) glDisableClientState(GL_COLOR_ARRAY);

@@ -16,8 +16,8 @@ typedef struct Transform
 typedef struct Mesh
 {
 	Vector3* points;
-	int pointCount;
 	int* indices;
+	int indexCount;
 	RGBA* colors;
 	bool isUniformColor;
 } Mesh;

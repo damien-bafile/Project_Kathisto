@@ -45,7 +45,7 @@ void windowRender(void)
 	//glVertex3f(0.0f, 1.0f, 1.0f); // point 3
 	//glEnd();
 
-	Vector3 vecArr[] = {
+	const Vector3 vecArr[] = {
 		// front
 		{ -1.0, -1.0,  1.0},
 		{1.0, -1.0,  1.0 },
@@ -94,17 +94,32 @@ void windowRender(void)
 		{1.0, 1.0, 1.0, 1.0f}
 	};
 
-	Mesh mesh = { .points = vecArr, .indices = indices, .pointCount = 36, .colors = colors, .isUniformColor = false };
+	Mesh mesh = { .points = vecArr, .indices = indices, .indexCount = 36, .colors = colors, .isUniformColor = false };
 	drawMesh(mesh);
 
-	//Draw ground
-	//glColor3f(0.7f, 0.7f, 0.7f);
-	//glBegin(GL_POLYGON);
-	//glVertex3f(-100.0f, 0.0f, -100.0f);
-	//glVertex3f(-100.0f, 0.0f, 100.0f);
-	//glVertex3f(100.0f, 0.0f, 100.0f);
-	//glVertex3f(100.0f, 0.0f, -100.0f);
-	//glEnd();
+
+	const Vector3 groundVertexBuffer[] =
+	{
+		{-100.0f, 0.0f, -100.0f},
+		{-100.0f, 0.0f, 100.0f},
+		{100.0f, 0.0f, 100.0f},
+		{100.0f, 0.0f, -100.0f},
+	};
+
+	const Vector3Int groundIndexBuffer[] =
+	{
+		{0, 1, 2},
+		{2, 3, 0}
+	};
+	const RGBA groundColorsBuffer[] = { {0.7f, 0.7f, 0.7f, 1.0f} };
+	Mesh groundMesh = { 
+		.points = groundVertexBuffer, 
+		.indices = groundIndexBuffer, 
+		.indexCount = 6,
+		.colors = groundColorsBuffer, 
+		.isUniformColor = true };
+
+	drawMesh(groundMesh);
 
 	// ======================================= \\
 
