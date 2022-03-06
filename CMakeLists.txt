@@ -11,7 +11,7 @@ find_package(OpenGL REQUIRED)
 
 add_subdirectory(src)
 
-target_compile_definitions(myLib PUBLIC)
+
 
 # Add source to this project's executable.
 add_executable(${PROJECT_NAME} ${SOURCES})
@@ -23,3 +23,7 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                 ${CMAKE_SOURCE_DIR}/assets $<TARGET_FILE_DIR:${PROJECT_NAME}>/assets)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC freeglut_static)
+
+target_compile_definitions(myLib PUBLIC)
+
+target_include_directories(myLib PUBLIC ${CMAKE_CURRENT_LIST_DIR})

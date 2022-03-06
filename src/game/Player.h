@@ -1,6 +1,7 @@
 #pragma once
 
-#include "math/Vector.h"
+#include "src/math/Vector.h"
+#include "src/window/Window.h"
 
 
 extern const float MOUSE_SENS;
