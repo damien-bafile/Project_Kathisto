@@ -33,6 +33,16 @@ float deltaTime = 0.0f;
 void reshapeWindow(int width, int height);
 void render(void);
 
+void onKeyDown(unsigned char key, int xx, int yy);
+void onKeyUp(unsigned char key, int xx, int yy);
+
+void onSpecialKeyDown(int key, int xx, int yy);
+void onSpecialKeyUp(int key, int xx, int yy);
+
+void onMouseButton(int button, int state, int xx, int yy);
+void onMouseMove(int xx, int yy);
+
+
 int main(int argc, char** argv)
 {
 	// initialise GLUT, with debug logs
@@ -66,7 +76,6 @@ int main(int argc, char** argv)
 	glutSpecialUpFunc(onSpecialKeyUp); // on special key up
 
 	glutIgnoreKeyRepeat(1); // ignore auto repeat keystrokes so it doesnt constantly fire key up and key down
-
 
 	glutMouseFunc(onMouseButton); // on mouse click
 	glutPassiveMotionFunc(onMouseMove); // ALWAYS MOVING
