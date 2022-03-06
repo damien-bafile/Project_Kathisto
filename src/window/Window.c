@@ -25,19 +25,19 @@ void windowRender(void)
 	// calculate delta time (time since last frame)
 	calculateDeltaTime();
 
-		// clear the color and depth buffer
+	// clear the color and depth buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// resets transformations
 	glLoadIdentity();
 
-	
+	// ======= GAME OBJECTS RENDER  ======= \\
 	// CAMERA RENDER
 	cameraRender(deltaTime);
 
 	// draw a basic purple triangle
 	glColor3f(0.6f, 0.25f, 0.65f);
-	glBegin(GL_TRIANGLES); // set mode to drawing in triangles
+	glBegin(GL_POLYGON); // set mode to drawing in triangles
 	glVertex3f(1.0f, 1.0f, 1.0f); // point 1
 	glVertex3f(1.0f, 0.0f, 1.0f); // point 2
 	glVertex3f(0.0f, 1.0f, 1.0f); // point 3
@@ -45,12 +45,14 @@ void windowRender(void)
 
 	//Draw ground
 	glColor3f(0.7f, 0.7f, 0.7f);
-	glBegin(GL_QUADS);
+	glBegin(GL_POLYGON);
 	glVertex3f(-100.0f, 0.0f, -100.0f);
 	glVertex3f(-100.0f, 0.0f, 100.0f);
 	glVertex3f(100.0f, 0.0f, 100.0f);
 	glVertex3f(100.0f, 0.0f, -100.0f);
 	glEnd();
+
+	// ======================================= \\
 
 
 	// swap the buffers
