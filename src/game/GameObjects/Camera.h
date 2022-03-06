@@ -12,7 +12,7 @@
 extern Vector3 cameraForwardDir;
 extern Vector3 cameraPos;
 extern Vector3 cameraUp;
-extern Vector3 moveDir;
+extern Vector3 cameraMoveDir;
 
 extern Vector2 mousePos;
 extern Vector2 mouseDeltaPos;
