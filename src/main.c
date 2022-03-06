@@ -6,6 +6,11 @@
 #include "window/Window.h"
 
 
+void render(void)
+{
+	windowRender();
+}
+
 int main(int argc, char** argv)
 {
 	// initialise GLUT, with debug logs
@@ -53,9 +58,4 @@ int main(int argc, char** argv)
 	glutMainLoop();
 
 	return 1;
-}
-
-void render(void)
-{
-	windowRender();
 }

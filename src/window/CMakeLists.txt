@@ -1,4 +1,4 @@
-set(SOURCES
+list(APPEND SOURCES
    src/window/Window.h
    src/window/Window.c
 

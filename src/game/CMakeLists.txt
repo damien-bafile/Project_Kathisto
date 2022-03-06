@@ -1,4 +1,4 @@
-set(SOURCES
+list(APPEND SOURCES
    src/game/Player.h
    src/game/Player.c
 

@@ -1,10 +1,12 @@
+#pragma once
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <GL/glut.h>
 #include <GL/freeglut_ext.h>
 
-#include "src/math/Vector.h"
-#include "src/game/Player.h"
+#include "math/Vector.h"
+#include "game/Player.h"
 
 
 extern int WINDOW_WIDTH;
