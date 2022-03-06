@@ -33,7 +33,7 @@ void windowRender(void)
 
 	
 	// CAMERA RENDER
-	cameraRender();
+	cameraRender(deltaTime);
 
 	// draw a basic purple triangle
 	glColor3f(0.6f, 0.25f, 0.65f);

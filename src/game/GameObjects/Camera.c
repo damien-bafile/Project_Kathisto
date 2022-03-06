@@ -45,4 +45,3 @@ void cameraRender(float deltaTime)
 		cameraPos.x + cameraForwardDir.x, cameraPos.y + cameraForwardDir.y, cameraPos.z + cameraForwardDir.z,
 		cameraUp.x, cameraUp.y, cameraUp.z);
 }
-

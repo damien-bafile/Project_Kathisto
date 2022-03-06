@@ -4,6 +4,10 @@
 #include <stdio.h>
 #include <GL/freeglut.h>
 
+#include "Window.h"
+#include "game/GameObjects/Camera.h"
+
+
 void onKeyDown(unsigned char key, int x, int y); // on key down
 void onKeyUp(unsigned char key, int x, int y); // on key up
 

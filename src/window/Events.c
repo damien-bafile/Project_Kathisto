@@ -2,25 +2,24 @@
 
 void onKeyDown(unsigned char key, int x, int y)
 {
-
 	switch (key) {
 	case 'w':
-		moveDir.z = 1.0f;
+		cameraMoveDir.z = 1.0f;
 		break;
 	case 'a':
-		moveDir.x = -1.0f;
+		cameraMoveDir.x = -1.0f;
 		break;
 	case 's':
-		moveDir.z = -1.0f;
+		cameraMoveDir.z = -1.0f;
 		break;
 	case 'd':
-		moveDir.x = 1.0f;
+		cameraMoveDir.x = 1.0f;
 		break;
 	case ' ':
-		moveDir.y = 1.0f;
+		cameraMoveDir.y = 1.0f;
 		break;
 	case 'z':
-		moveDir.y = -1.0f;
+		cameraMoveDir.y = -1.0f;
 		break;
 	case 27:
 		exit(0);
@@ -32,22 +31,22 @@ void onKeyUp(unsigned char key, int x, int y)
 {
 	switch (key) {
 	case 'w':
-		moveDir.z = 0.0f;
+		cameraMoveDir.z = 0.0f;
 		break;
 	case 'a':
-		moveDir.x = 0.0f;
+		cameraMoveDir.x = 0.0f;
 		break;
 	case 's':
-		moveDir.z = 0.0f;
+		cameraMoveDir.z = 0.0f;
 		break;
 	case 'd':
-		moveDir.x = 0.0f;
+		cameraMoveDir.x = 0.0f;
 		break;
 	case ' ':
-		moveDir.y = 0.0f;
+		cameraMoveDir.y = 0.0f;
 		break;
 	case 'z':
-		moveDir.y = 0.0f;
+		cameraMoveDir.y = 0.0f;
 		break;
 	}
 }
