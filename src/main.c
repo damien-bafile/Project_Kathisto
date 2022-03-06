@@ -42,6 +42,8 @@ void onSpecialKeyUp(int key, int xx, int yy);
 void onMouseButton(int button, int state, int xx, int yy);
 void onMouseMove(int xx, int yy);
 
+void computeCameraPos();
+
 
 int main(int argc, char** argv)
 {
@@ -98,6 +100,8 @@ void render(void)
 	currTime = glutGet(GLUT_ELAPSED_TIME);
 	deltaTime = (currTime - prevTime) / 1000.0f;
 	prevTime = currTime;
+
+	computeCameraPos();
 
 	// clear the color and depth buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -162,7 +166,6 @@ void reshapeWindow(int width, int height)
 	// set the matrix mode back to model view
 	glMatrixMode(GL_MODELVIEW);
 }
-
 
 void onKeyDown(unsigned char key, int x, int y)
 {
@@ -244,4 +247,20 @@ void onMouseMove(int x, int y)
 	mousePos.x += mouseDeltaPos.x;
 	mousePos.y += mouseDeltaPos.y;
 
+}
+
+void computeCameraPos()
+{
+	Vector3 newPos;
+	newPos = Vec3ScalarMultiply(cameraForwardDir, cameraDeltaPos.z * (WALK_SPEED * deltaTime));
+	cameraPos.x += newPos.x;
+	cameraPos.y += newPos.y;
+	cameraPos.z += newPos.z;
+
+	newPos = Vec3ScalarMultiply(Vec3Normalize(Vec3CrossProduct(cameraForwardDir, cameraUp)), cameraDeltaPos.x * (WALK_SPEED * deltaTime));
+	cameraPos.x += newPos.x;
+	cameraPos.y += newPos.y;
+	cameraPos.z += newPos.z;
+
+	cameraPos.y += cameraDeltaPos.y * (UP_SPEED * deltaTime);
 }
