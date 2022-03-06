@@ -1,6 +1,7 @@
 #pragma once
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
 #include <GL/freeglut.h>
 
 #include "math/Vector.h"
@@ -18,6 +19,7 @@ typedef struct Mesh
 	int pointCount;
 	int* indices;
 	float* colors;
+	bool isUniformColor;
 } Mesh;
 
 void drawMesh(Mesh mesh);

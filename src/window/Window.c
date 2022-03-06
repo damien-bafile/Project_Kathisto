@@ -106,7 +106,7 @@ void windowRender(void)
 		1.0, 1.0, 1.0, 1.0
 	};
 
-	Mesh mesh = { .points = vecArr, .indices = indices, .pointCount = 36, .colors = colors };
+	Mesh mesh = { .points = vecArr, .indices = indices, .pointCount = 36, .colors = colors, .isUniformColor = true };
 	drawMesh(mesh);
 
 	//Draw ground
