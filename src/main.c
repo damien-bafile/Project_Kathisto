@@ -27,21 +27,33 @@ void render(void);
 
 int main(int argc, char** argv)
 {
+	// initialise GLUT, with debug logs
 	glutInit(&argc, argv);
 	glutInitContextFlags(GLUT_DEBUG);
-	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 
+	// set RGBA mode, double buffer window, and have a depth buffer
+	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
+
+	// set the window starting position and size
 	glutInitWindowPosition(200, 200);
 	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+
+	// set window name
 	glutCreateWindow("Project Kathisto");
 
+	// callback functions
+
+	// on reshape
 	glutReshapeFunc(reshapeWindow);
 
+	// rendering callbacks
 	glutDisplayFunc(render);
 	glutIdleFunc(render);
 
+	// enable depth testing
 	glEnable(GL_DEPTH_TEST);
 
+	// enter loop
 	glutMainLoop();
 
 	return 1;
@@ -49,12 +61,12 @@ int main(int argc, char** argv)
 
 void render(void)
 {
-
+	// get the current delta time (time since last frame)
 	currTime = glutGet(GLUT_ELAPSED_TIME);
 	deltaTime = (currTime - prevTime) / 1000.0f;
 	prevTime = currTime;
 
-
+	// clear the color and depth buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// resets transformations
@@ -66,11 +78,13 @@ void render(void)
 		cameraUp.x, cameraUp.y, cameraUp.z);
 
 
+	// draw a basic purple triangle
 	glColor3f(0.6f, 0.25f, 0.65f);
-	glBegin(GL_TRIANGLES);
-	glVertex3f(1.0f, 1.0f, 1.0f);
-	glVertex3f(1.0f, 0.0f, 1.0f);
-	glVertex3f(0.0f, 1.0f, 1.0f);
+	glBegin(GL_TRIANGLES); // set mode to drawing in triangles
+	glVertex3f(1.0f, 1.0f, 1.0f); // point 1
+	glVertex3f(1.0f, 0.0f, 1.0f); // point 2
+	glVertex3f(0.0f, 1.0f, 1.0f); // point 3
+	glEnd();
 	
 	//Draw ground
 	//glColor3f(0.7f, 0.7f, 0.7f);
@@ -79,30 +93,39 @@ void render(void)
 	//glVertex3f(-100.0f, 0.0f, 100.0f);
 	//glVertex3f(100.0f, 0.0f, 100.0f);
 	//glVertex3f(100.0f, 0.0f, -100.0f);
-	glEnd();
+	//glEnd();
 
 
+	// swap the buffers
 	glutSwapBuffers();
 }
 
-
+// Called when the window gets resized
 void reshapeWindow(int width, int height)
 {
+	// if height is 0 then set it 1
 	if (height == 0) height = 1;
 
+	// set the window width and height
 	WINDOW_WIDTH = width;
 	WINDOW_HEIGHT = height;
 
+	// get the width:height ratio
 	float ratio = width * 1.0f / height;
 
-
+	// set the matrix to projection
 	glMatrixMode(GL_PROJECTION);
 
+	// reset transformations
 	glLoadIdentity();
 
+	// set the viewports width and height
 	glViewport(0, 0, width, height);
 
-	gluPerspective(45, ratio, 1, 100);
+	// set the perspective for the projection matrix
+	// fov, aspect ratio, near clipping distance, far clipping distance
+	gluPerspective(45, ratio, 1, 500);
 
+	// set the matrix mode back to model view
 	glMatrixMode(GL_MODELVIEW);
 }
