@@ -25,6 +25,19 @@ typedef struct RGBA
 	float a;
 } RGBA;
 
+typedef struct Vector2Int
+{
+	int x;
+	int y;
+} Vector2Int;
+
+typedef struct Vector3Int
+{
+	int x;
+	int y;
+	int z;
+} Vector3Int;
+
 
 Vector2 ArrayToVec2(const float arr[2]);
 Vector3 ArrayToVec3(const float arr[3]);
