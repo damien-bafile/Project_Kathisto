@@ -6,6 +6,10 @@
 
 #include "Events.h"
 #include "game/GameObjects/Camera.h"
+#include "game/GameObjects/Ground.h"
+#include "game/Game.h"
+#include "math/Vector.h"
+
 
 extern int WINDOW_WIDTH;
 extern int WINDOW_HEIGHT;

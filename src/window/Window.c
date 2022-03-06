@@ -1,6 +1,4 @@
 #include "Window.h"
-#include <game/Game.h>
-#include "math/Vector.h"
 
 int WINDOW_WIDTH = 750;
 int WINDOW_HEIGHT = 750;
@@ -34,39 +32,12 @@ void windowRender(void)
 	glLoadIdentity();
 
 	// ======= GAME OBJECTS RENDER  ======= \\
+	
 	// CAMERA RENDER
 	cameraRender(deltaTime);
 
-	// position of each of the ground points
-	const Vector3 groundVertexBuffer[] =
-	{
-		{-100.0f, 0.0f, -100.0f},
-		{-100.0f, 0.0f, 100.0f},
-		{100.0f, 0.0f, 100.0f},
-		{100.0f, 0.0f, -100.0f},
-	};
-
-	// index buffer on how to  the points
-	const Vector3Int groundIndexBuffer[] =
-	{
-		{0, 1, 2},
-		{2, 3, 0}
-	};
-	
-	// simple RGBA color buffer
-	const RGBA groundColorsBuffer[] = { {0.7f, 0.7f, 0.7f, 1.0f} };
-
-	// create the mesh
-	Mesh groundMesh = { 
-		.points = groundVertexBuffer, 
-		.indices = groundIndexBuffer, 
-		.indexCount = 6,
-		.colors = groundColorsBuffer, 
-		.isUniformColor = true };
-
-
-	// draw the mesh
-	drawMesh(groundMesh);
+	// GROUND RENDER
+	groundRender(deltaTime);
 
 	// ======================================= \\
 
