@@ -50,7 +50,6 @@ int main(int argc, char** argv)
 void render(void)
 {
 
-	//frame++;
 	currTime = glutGet(GLUT_ELAPSED_TIME);
 	deltaTime = (currTime - prevTime) / 1000.0f;
 	prevTime = currTime;
