@@ -124,13 +124,13 @@ void render(void)
 	glEnd();
 
 	//Draw ground
-	//glColor3f(0.7f, 0.7f, 0.7f);
-	//glBegin(GL_QUADS);
-	//glVertex3f(-100.0f, 0.0f, -100.0f);
-	//glVertex3f(-100.0f, 0.0f, 100.0f);
-	//glVertex3f(100.0f, 0.0f, 100.0f);
-	//glVertex3f(100.0f, 0.0f, -100.0f);
-	//glEnd();
+	glColor3f(0.7f, 0.7f, 0.7f);
+	glBegin(GL_QUADS);
+	glVertex3f(-100.0f, 0.0f, -100.0f);
+	glVertex3f(-100.0f, 0.0f, 100.0f);
+	glVertex3f(100.0f, 0.0f, 100.0f);
+	glVertex3f(100.0f, 0.0f, -100.0f);
+	glEnd();
 
 
 	// swap the buffers
