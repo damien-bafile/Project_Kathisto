@@ -51,6 +51,9 @@ const RGBA cubeColorBuffer[] =
 
 Mesh cubeMesh = { .points = cubeVertexBuffer, .indices = cubeIndexBuffer, .indexCount = 36, .colors = cubeColorBuffer, .isUniformColor = false };
 
+GameObject cube;
+// initGameObject(cube);
+
 void cubeRender(float deltaTime)
 {
 	drawMesh(cubeMesh);

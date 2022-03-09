@@ -1,5 +1,14 @@
 #include "Vector.h"
 
+Vector2 EmptyVec2()
+{
+	return (Vector2){0.0f, 0.0f};
+}
+
+Vector3 EmptyVec3(){
+
+	return (Vector3){0.0f, 0.0f, 0.0f};
+}
 
 Vector2 ArrayToVec2(const float arr[2])
 {

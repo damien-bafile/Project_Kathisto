@@ -10,18 +10,18 @@
 #include "game/Game.h"
 #include "game/GameConstants.h"
 
+extern GameObject cube;
+// // position of each of the cube points
+// extern const Vector3 cubeVertexBuffer[];
 
-// position of each of the cube points
-extern const Vector3 cubeVertexBuffer[];
+// // index buffer on how to draw the points
+// extern const Vector3Int cubeIndexBuffer[];
 
-// index buffer on how to draw the points
-extern const Vector3Int cubeIndexBuffer[];
+// // simple RGBA color buffer
+// extern const RGBA cubeColorBuffer[];
 
-// simple RGBA color buffer
-extern const RGBA cubeColorBuffer[];
+// // create the mesh
+// extern Mesh cubeMesh;
 
-// create the mesh
-extern Mesh cubeMesh;
-
-// method to be placed in windowRender
-void cubeRender(float deltaTime);
+// // method to be placed in windowRender
+// void cubeRender(float deltaTime);

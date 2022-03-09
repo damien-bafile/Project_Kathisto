@@ -38,6 +38,8 @@ typedef struct Vector3Int
 	int z;
 } Vector3Int;
 
+Vector2 EmptyVec2();
+Vector3 EmptyVec3();
 
 Vector2 ArrayToVec2(const float arr[2]);
 Vector3 ArrayToVec3(const float arr[3]);
