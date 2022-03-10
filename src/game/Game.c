@@ -1,5 +1,86 @@
 #include "Game.h"
 
+void initGameObjectManager(GameObjectManager* gameObjectManager)
+{
+    const size_t count = 20u;
+    gameObjectManager->count = count;
+    gameObjectManager->gameObjects = malloc(count * sizeof(GameObject));
+    gameObjectManager->lastIndex = 0u;
+    gameObjectManager->freeSpace = count;
+}
+
+void gameObjectManagerIncrease(GameObjectManager *gameObjectManager)
+{
+    const size_t newCount = gameObjectManager->count + (gameObjectManager->count / 2);
+    GameObject *temp = realloc(gameObjectManager->gameObjects, newCount * sizeof(GameObject));
+    if(temp)
+    {
+        
+        gameObjectManager->gameObjects = temp;
+
+        for (size_t i = gameObjectManager->count; i < newCount; i++)
+        {
+            initGameObject(&gameObjectManager->gameObjects[i]);
+        }
+
+        gameObjectManager->count += newCount;
+        gameObjectManager->freeSpace += newCount;
+    }
+}
+
+/**
+ * @brief 
+ * 	When a GameObject is added:
+		add the game object to the end of the game object list at index of count using realloc
+		increase count by 1
+ * @param gameObjectManager 
+ * @param gameObject 
+ */
+void gameObjectManagerAdd(GameObjectManager *gameObjectManager, GameObject gameObject)
+{
+    if(gameObjectManager->freeSpace == 0)
+        gameObjectManagerIncrease(gameObjectManager);
+
+    gameObjectManager->gameObjects[gameObjectManager->lastIndex] = gameObject; // test this
+
+    gameObjectManager->freeSpace--;
+    gameObjectManager->lastIndex++;
+}
+
+void freeMesh(Mesh *mesh)
+{
+    free(mesh->points);
+    free(mesh->indices);
+    free(mesh->colors);
+
+    free(mesh);
+    mesh = NULL;
+}
+void gameObjectCleanUp(GameObject* gameObject)
+{
+    free(gameObject->name);
+    gameObject->name = NULL;
+
+    freeMesh(&gameObject->mesh);
+}
+
+/**
+ * @brief 
+ * When a GameObject is removed:
+		remove the gameobject from the game object list by setting by freeing it
+		take 1 from count
+		for all gameobjects where index > deleted index
+		copy the gameobject over to gameobject[i - 1]
+		reallocate array to new size of count using realloc
+ * @param gameObjectManager 
+ * @param id 
+ */
+void gameObjectManagerRemove(GameObjectManager *gameObjectManager, uint32_t id)
+{
+
+}
+
+
 void initGameObject(GameObject *gameObject)
 {
     gameObject->id = 0;

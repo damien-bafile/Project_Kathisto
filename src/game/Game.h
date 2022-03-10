@@ -46,42 +46,26 @@ typedef struct GameObjectManager
 {
 	GameObject *gameObjects;
 	size_t count;
+	size_t lastIndex;
+	size_t freeSpace;
 } GameObjectManager;
 
-typedef struct IdKeyValue
-{
-	uint32_t id;
-	size_t index;
-} IdKeyValue;
+// typedef struct IdKeyValue
+// {
+// 	uint32_t id;
+// 	size_t index;
+// } IdKeyValue;
 
-typedef struct IdMap
-{
-	IdKeyValue *values;
-} IdMap;
+// typedef struct IdMap
+// {
+// 	IdKeyValue *values;
+// } IdMap;
 
-/*
-	*When a GameObject is added:
-		add the game object to the end of the game object list at index of count using realloc
-		add value to the IDMap of gamobjects id : pushed index (count) using realloc
-		increase count by 1
-
-	*When a GameObject is removed:
-		first find the index in IdMap where id == id
-		remove the key value from the IdMap
-		remove the gameobject from the game object list by setting it to null
-		take 1 from count
-		shift all gameobjects left where index > index
-			copy gameobjects[i - 1] = gameobjects[i] while i < count
-		reallocate array to new size of count using realloc
-*/
-
-
-
-
-
-void gameObjectManagerAdd(GameObject GameObject);
-void gameObjectManagerRemove(uint32_t id);
-GameObject* gameObjectManagerFind(uint32_t id);
+void gameObjectManagerInit(GameObjectManager *gameObjectManager);
+void gameObjectManagerIncrease(GameObjectManager *gameObjectManager);
+void gameObjectManagerAdd(GameObjectManager *gameObjectManager, GameObject GameObject);
+void gameObjectManagerRemove(GameObjectManager *gameObjectManager, uint32_t id);
+GameObject* gameObjectManagerFind(GameObjectManager *gameObjectManager, uint32_t id);
 
 void initGameObject(GameObject *gameObject); // initialise the game object
 void updateGameObject(GameObject *gameObject); // called every frame update
@@ -90,6 +74,8 @@ void fixedUpdateGameObject(GameObject *gameObject); // called on physics update
 void initTransform(Transform *transform);
 void initMesh(Mesh *mesh);
 void initRigidBody(RigidBody *RigidBody);
+
+void freeMesh(Mesh *mesh);
 
 void drawMesh(Mesh mesh); // draw a mesh
 void simulateRigidBody(RigidBody *RigidBody); // simulate rigid body
