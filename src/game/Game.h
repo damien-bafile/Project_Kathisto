@@ -61,18 +61,18 @@ typedef struct IdMap
 
 /*
 	*When a GameObject is added:
-		add the game object to the end of the game object list at index of count
-		add value to the IDMap of gamobjects id : pushed index (count)
+		add the game object to the end of the game object list at index of count using realloc
+		add value to the IDMap of gamobjects id : pushed index (count) using realloc
 		increase count by 1
 
 	*When a GameObject is removed:
 		first find the index in IdMap where id == id
 		remove the key value from the IdMap
 		remove the gameobject from the game object list by setting it to null
-
-
-
-
+		take 1 from count
+		shift all gameobjects left where index > index
+			copy gameobjects[i - 1] = gameobjects[i] while i < count
+		reallocate array to new size of count using realloc
 */
 
 
