@@ -7,6 +7,10 @@ void initGameObjectManager(GameObjectManager* gameObjectManager)
     gameObjectManager->gameObjects = malloc(count * sizeof(GameObject));
     gameObjectManager->lastIndex = 0u;
     gameObjectManager->freeSpace = count;
+    for (size_t i = 0; i < count; i++)
+    {
+        initGameObject(&gameObjectManager->gameObjects[i]);
+    }
 }
 
 void gameObjectManagerIncrease(GameObjectManager *gameObjectManager)
@@ -15,7 +19,6 @@ void gameObjectManagerIncrease(GameObjectManager *gameObjectManager)
     GameObject *temp = realloc(gameObjectManager->gameObjects, newCount * sizeof(GameObject));
     if(temp)
     {
-        
         gameObjectManager->gameObjects = temp;
 
         for (size_t i = gameObjectManager->count; i < newCount; i++)
@@ -47,47 +50,56 @@ void gameObjectManagerAdd(GameObjectManager *gameObjectManager, GameObject gameO
     gameObjectManager->lastIndex++;
 }
 
-void freeMesh(Mesh *mesh)
-{
-    free(mesh->points);
-    free(mesh->indices);
-    free(mesh->colors);
-
-    free(mesh);
-    mesh = NULL;
-}
-void gameObjectCleanUp(GameObject* gameObject)
-{
-    free(gameObject->name);
-    gameObject->name = NULL;
-
-    freeMesh(&gameObject->mesh);
-}
-
 /**
  * @brief 
  * When a GameObject is removed:
 		remove the gameobject from the game object list by setting by freeing it
-		take 1 from count
 		for all gameobjects where index > deleted index
 		copy the gameobject over to gameobject[i - 1]
-		reallocate array to new size of count using realloc
+		take 1 from count
+        freespace add 1
+        lastIndex take 1
  * @param gameObjectManager 
  * @param id 
  */
 void gameObjectManagerRemove(GameObjectManager *gameObjectManager, uint32_t id)
 {
-
+    freeGameObject(&gameObjectManager->gameObjects[id]);
+    for (size_t i = id + 1; i < gameObjectManager->count; i++)
+    {
+        gameObjectManager->gameObjects[i - 1] = gameObjectManager->gameObjects[i];
+        if(i == gameObjectManager->count - 1)
+        freeGameObject(&gameObjectManager->gameObjects[i]);
+    }
+    
+    gameObjectManager->count--;
+    gameObjectManager->freeSpace++;
+    gameObjectManager->lastIndex--;
 }
 
+GameObject* gameObjectManagerFind(GameObjectManager *gameObjectManager, uint32_t id)
+{
+    return &gameObjectManager->gameObjects[id];
+}
 
 void initGameObject(GameObject *gameObject)
 {
-    gameObject->id = 0;
+    gameObject->id = NULL;
     gameObject->name = NULL;
     initTransform(&gameObject->transform);
     initMesh(&gameObject->mesh);
     initRigidBody(&gameObject->rigidBody);
+}
+
+void freeGameObject(GameObject* gameObject)
+{
+    free(gameObject->name);
+    gameObject->name = NULL;
+
+    freeMesh(&gameObject->mesh);
+    free(gameObject);
+    gameObject = NULL;
+
 }
 
 void initTransform(Transform *transform)
@@ -112,6 +124,16 @@ void initRigidBody(RigidBody* rigidBody)
     rigidBody->useGravity = false;
     rigidBody->mass = 0.0f;
     rigidBody->velocity = 0.0f;
+}
+
+void freeMesh(Mesh *mesh)
+{
+    free(mesh->points);
+    free(mesh->indices);
+    free(mesh->colors);
+
+    free(mesh);
+    mesh = NULL;
 }
 
 void drawMesh(Mesh mesh)

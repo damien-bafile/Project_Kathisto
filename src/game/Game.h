@@ -50,18 +50,7 @@ typedef struct GameObjectManager
 	size_t freeSpace;
 } GameObjectManager;
 
-// typedef struct IdKeyValue
-// {
-// 	uint32_t id;
-// 	size_t index;
-// } IdKeyValue;
-
-// typedef struct IdMap
-// {
-// 	IdKeyValue *values;
-// } IdMap;
-
-void gameObjectManagerInit(GameObjectManager *gameObjectManager);
+void initGameObjectManager(GameObjectManager *gameObjectManager);
 void gameObjectManagerIncrease(GameObjectManager *gameObjectManager);
 void gameObjectManagerAdd(GameObjectManager *gameObjectManager, GameObject GameObject);
 void gameObjectManagerRemove(GameObjectManager *gameObjectManager, uint32_t id);
@@ -70,6 +59,7 @@ GameObject* gameObjectManagerFind(GameObjectManager *gameObjectManager, uint32_t
 void initGameObject(GameObject *gameObject); // initialise the game object
 void updateGameObject(GameObject *gameObject); // called every frame update
 void fixedUpdateGameObject(GameObject *gameObject); // called on physics update
+void freeGameObject(GameObject *gameObject); // free the game object
 
 void initTransform(Transform *transform);
 void initMesh(Mesh *mesh);
