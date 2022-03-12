@@ -112,11 +112,49 @@ void initialiseWindow(int* argc, char** argv, char* windowName)
 		{1.0, 1.0, 1.0, 1.0f}
 	};
 
-	Mesh cubeMesh = { .points = cubeVertexBuffer, .indices = cubeIndexBuffer, .indexCount = 36, .colors = cubeColorBuffer, .isUniformColor = false };
+	Mesh cubeMesh = {
+		.points = cubeVertexBuffer,
+		.indices = cubeIndexBuffer,
+		.indexCount = 36,
+		.colors = cubeColorBuffer,
+		.isUniformColor = false };
 
 	cube.mesh = cubeMesh;
 
 	gameObjectManagerAdd(&gameObjectManager, cube);
+
+
+
+	GameObject floor;
+	initGameObject(&floor);
+
+	// position of each of the ground points
+	const Vector3 floorVertexBuffer[] = {
+		{-100.0f, 0.0f, -100.0f},
+		{-100.0f, 0.0f, 100.0f},
+		{100.0f, 0.0f, 100.0f},
+		{100.0f, 0.0f, -100.0f},
+	};
+
+	// index buffer on how to  the points
+	const Vector3Int floorIndexBuffer[] = {
+		{0, 1, 2},
+		{2, 3, 0}
+	};
+
+	// simple RGBA color buffer
+	const RGBA floorColorBuffer[] = { {0.7f, 0.7f, 0.7f, 1.0f} };
+
+	// create the mesh
+	Mesh floorMesh = {
+		.points = floorVertexBuffer,
+		.indices = floorIndexBuffer,
+		.indexCount = 6,
+		.colors = floorColorBuffer,
+		.isUniformColor = true };
+
+	floor.mesh = floorMesh;
+	gameObjectManagerAdd(&gameObjectManager, floor);
 
 	// enter loop
 	glutMainLoop();
@@ -153,7 +191,7 @@ void calculateDeltaTime()
 	// get the current delta time (time since last frame)
 	currTime = glutGet(GLUT_ELAPSED_TIME);
 	deltaTime = (currTime - prevTime) / 1000.0f;
-	prevTime = currTime;
+	prevTime = (float)currTime;
 }
 
 void reshapeWindow(int width, int height)
