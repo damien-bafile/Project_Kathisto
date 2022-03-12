@@ -7,6 +7,8 @@ void initGameObjectManager(GameObjectManager* gameObjectManager)
     gameObjectManager->gameObjects = malloc(count * sizeof(GameObject));
     gameObjectManager->lastIndex = 0u;
     gameObjectManager->freeSpace = count;
+
+    if (gameObjectManager->gameObjects == NULL) return;
     for (size_t i = 0; i < count; i++)
     {
         initGameObject(&gameObjectManager->gameObjects[i]);
@@ -44,6 +46,8 @@ void gameObjectManagerAdd(GameObjectManager *gameObjectManager, GameObject gameO
     if(gameObjectManager->freeSpace == 0)
         gameObjectManagerIncrease(gameObjectManager);
 
+    gameObject.id = gameObjectManager->lastIndex;
+
     gameObjectManager->gameObjects[gameObjectManager->lastIndex] = gameObject; // test this
 
     gameObjectManager->freeSpace--;
@@ -62,12 +66,13 @@ void gameObjectManagerAdd(GameObjectManager *gameObjectManager, GameObject gameO
  * @param gameObjectManager 
  * @param id 
  */
-void gameObjectManagerRemove(GameObjectManager *gameObjectManager, uint32_t id)
+void gameObjectManagerRemove(GameObjectManager *gameObjectManager, size_t id)
 {
     freeGameObject(&gameObjectManager->gameObjects[id]);
     for (size_t i = id + 1; i < gameObjectManager->count; i++)
     {
         gameObjectManager->gameObjects[i - 1] = gameObjectManager->gameObjects[i];
+        gameObjectManager->gameObjects[i - 1].id = i - 1;
         if(i == gameObjectManager->count - 1)
         freeGameObject(&gameObjectManager->gameObjects[i]);
     }
@@ -77,18 +82,28 @@ void gameObjectManagerRemove(GameObjectManager *gameObjectManager, uint32_t id)
     gameObjectManager->lastIndex--;
 }
 
-GameObject* gameObjectManagerFind(GameObjectManager *gameObjectManager, uint32_t id)
+GameObject* gameObjectManagerFind(GameObjectManager *gameObjectManager, size_t id)
 {
     return &gameObjectManager->gameObjects[id];
 }
 
-void initGameObject(GameObject *gameObject)
+void initGameObject(GameObject* gameObject)
 {
     gameObject->id = NULL;
     gameObject->name = NULL;
     initTransform(&gameObject->transform);
     initMesh(&gameObject->mesh);
     initRigidBody(&gameObject->rigidBody);
+}
+
+void updateGameObject(GameObject* gameObject)
+{
+
+}
+
+void fixedUpdateGameObject(GameObject* gameObject)
+{
+
 }
 
 void freeGameObject(GameObject* gameObject)
@@ -152,4 +167,9 @@ void drawMesh(Mesh mesh)
 
     glDisableClientState(GL_VERTEX_ARRAY);
    if(!mesh.isUniformColor) glDisableClientState(GL_COLOR_ARRAY);
+}
+
+void simulateRigidBody(RigidBody* RigidBody)
+{
+
 }
