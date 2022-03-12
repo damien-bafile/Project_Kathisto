@@ -13,79 +13,7 @@ float deltaTime = 0.0f;
 
 GameObjectManager gameObjectManager;
 
-void calculateDeltaTime()
-{
-	// get the current delta time (time since last frame)
-	currTime = glutGet(GLUT_ELAPSED_TIME);
-	deltaTime = (currTime - prevTime) / 1000.0f;
-	prevTime = currTime;
-}
-
-void windowRender(void)
-{
-
-	GameObjectManager gameObectManager;
-
-	// calculate delta time (time since last frame)
-	calculateDeltaTime();
-
-	// clear the color and depth buffer
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	// resets transformations
-	glLoadIdentity();
-
-	// ======= GAME OBJECTS RENDER  ======= \\
-	
-
-	updateGameObjects(&gameObectManager);
-
-	// CAMERA RENDER
-	cameraRender(deltaTime);
-
-	// GROUND RENDER
-	groundRender(deltaTime);
-
-	// RENDER EXAMPLE CUBE
-	//cubeRender(deltaTime);
-
-	// ======================================= \\
-
-
-	// swap the buffers
-	glutSwapBuffers();
-}
-
-void reshapeWindow(int width, int height)
-{
-	// if height is 0 then set it 1
-	if (height == 0) height = 1;
-
-	// set the window width and height
-	WINDOW_WIDTH = width;
-	WINDOW_HEIGHT = height;
-
-	// get the width:height ratio
-	float ratio = width * 1.0f / height;
-
-	// set the matrix to projection
-	glMatrixMode(GL_PROJECTION);
-
-	// reset transformations
-	glLoadIdentity();
-
-	// set the viewports width and height
-	glViewport(0, 0, width, height);
-
-	// set the perspective for the projection matrix
-	// fov, aspect ratio, near clipping distance, far clipping distance
-	gluPerspective(45, ratio, 1, 500);
-
-	// set the matrix mode back to model view
-	glMatrixMode(GL_MODELVIEW);
-}
-
-void initialiseWindow(int *argc, char** argv, char* windowName)
+void initialiseWindow(int* argc, char** argv, char* windowName)
 {
 
 	// initialise GLUT, with debug logs
@@ -185,11 +113,74 @@ void initialiseWindow(int *argc, char** argv, char* windowName)
 	};
 
 	Mesh cubeMesh = { .points = cubeVertexBuffer, .indices = cubeIndexBuffer, .indexCount = 36, .colors = cubeColorBuffer, .isUniformColor = false };
-	
+
 	cube.mesh = cubeMesh;
 
 	gameObjectManagerAdd(&gameObjectManager, cube);
 
 	// enter loop
 	glutMainLoop();
+}
+
+void windowRender(void)
+{
+
+	// calculate delta time (time since last frame)
+	calculateDeltaTime();
+
+	// clear the color and depth buffer
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	// resets transformations
+	glLoadIdentity();
+
+	// CAMERA RENDER
+	cameraRender(deltaTime);
+
+	// ======= GAME OBJECTS RENDER  ======= \\
+	
+	updateGameObjects(&gameObjectManager);
+
+	// ======================================= \\
+
+
+	// swap the buffers
+	glutSwapBuffers();
+}
+
+void calculateDeltaTime()
+{
+	// get the current delta time (time since last frame)
+	currTime = glutGet(GLUT_ELAPSED_TIME);
+	deltaTime = (currTime - prevTime) / 1000.0f;
+	prevTime = currTime;
+}
+
+void reshapeWindow(int width, int height)
+{
+	// if height is 0 then set it 1
+	if (height == 0) height = 1;
+
+	// set the window width and height
+	WINDOW_WIDTH = width;
+	WINDOW_HEIGHT = height;
+
+	// get the width:height ratio
+	float ratio = width * 1.0f / height;
+
+	// set the matrix to projection
+	glMatrixMode(GL_PROJECTION);
+
+	// reset transformations
+	glLoadIdentity();
+
+	// set the viewports width and height
+	glViewport(0, 0, width, height);
+
+	// set the perspective for the projection matrix
+	// fov, aspect ratio, near clipping distance, far clipping distance
+	gluPerspective(45, ratio, 1, 500);
+
+	// set the matrix mode back to model view
+	glMatrixMode(GL_MODELVIEW);
 }

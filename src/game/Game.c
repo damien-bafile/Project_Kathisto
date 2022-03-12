@@ -89,7 +89,7 @@ GameObject* gameObjectManagerFind(GameObjectManager *gameObjectManager, size_t i
 
 void updateGameObjects(GameObjectManager* gameObjectManager)
 {
-    for (size_t i = 0; i <= gameObjectManager->lastIndex; i++)
+    for (size_t i = 0; i < gameObjectManager->lastIndex; i++)
     {
         updateGameObject(&gameObjectManager->gameObjects[i]);
     }
@@ -106,7 +106,7 @@ void initGameObject(GameObject* gameObject)
 
 void updateGameObject(GameObject* gameObject)
 {
-
+    drawMesh(gameObject->mesh);
 }
 
 void fixedUpdateGameObject(GameObject* gameObject)
