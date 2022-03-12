@@ -14,7 +14,7 @@ void render(void)
 
 int main(int argc, char** argv)
 {
-	initialiseWindow(argc, argv, "Project Kathisto");
+	initialiseWindow(&argc, argv, "Project Kathisto");
 
 	return 1;
 }

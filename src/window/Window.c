@@ -11,6 +11,7 @@ int currTime = 0;
 float prevTime = 0.0f;
 float deltaTime = 0.0f;
 
+GameObjectManager gameObjectManager;
 
 void calculateDeltaTime()
 {
@@ -22,6 +23,9 @@ void calculateDeltaTime()
 
 void windowRender(void)
 {
+
+	GameObjectManager gameObectManager;
+
 	// calculate delta time (time since last frame)
 	calculateDeltaTime();
 
@@ -33,6 +37,9 @@ void windowRender(void)
 
 	// ======= GAME OBJECTS RENDER  ======= \\
 	
+
+	updateGameObjects(&gameObectManager);
+
 	// CAMERA RENDER
 	cameraRender(deltaTime);
 
@@ -40,7 +47,7 @@ void windowRender(void)
 	groundRender(deltaTime);
 
 	// RENDER EXAMPLE CUBE
-	cubeRender(deltaTime);
+	//cubeRender(deltaTime);
 
 	// ======================================= \\
 
@@ -78,10 +85,11 @@ void reshapeWindow(int width, int height)
 	glMatrixMode(GL_MODELVIEW);
 }
 
-void initialiseWindow(int argc, char** argv, char* windowName)
+void initialiseWindow(int *argc, char** argv, char* windowName)
 {
+
 	// initialise GLUT, with debug logs
-	glutInit(&argc, argv);
+	glutInit(argc, argv);
 	glutInitContextFlags(GLUT_DEBUG);
 
 	// set RGBA mode, double buffer window, and have a depth buffer
@@ -120,6 +128,67 @@ void initialiseWindow(int argc, char** argv, char* windowName)
 
 	// enable depth testing
 	glEnable(GL_DEPTH_TEST);
+
+	// SETUP GAME OBJECT MANAGER \\
+	// 
+	// setup game object manager
+	initGameObjectManager(&gameObjectManager);
+
+	GameObject cube;
+	initGameObject(&cube);
+
+	const Vector3 cubeVertexBuffer[] = {
+		// front
+		{ -1.0, 4.0,  1.0},
+		{1.0, 4.0,  1.0 },
+		{1.0,  6.0,  1.0},
+		{-1.0,  6.0,  1.0},
+		// back
+		{-1.0, 4.0, -1.0},
+		{ 1.0, 4.0, -1.0},
+		{ 1.0,  6.0, -1.0},
+		{-1.0,  6.0, -1.0}
+	};
+
+	const Vector3Int cubeIndexBuffer[] = {
+		// front
+		{0, 1, 2},
+		{2, 3, 0},
+		// right
+		{1, 5, 6},
+		{6, 2, 1},
+		// back
+		{7, 6, 5},
+		{5, 4, 7},
+		// left
+		{4, 0, 3},
+		{3, 7, 4},
+		// bottom
+		{4, 5, 1},
+		{1, 0, 4},
+		// top
+		{3, 2, 6},
+		{6, 7, 3}
+	};
+
+	const RGBA cubeColorBuffer[] = {
+		// front colors
+		{1.0, 0.0, 0.0, 1.0f},
+		{0.0, 1.0, 0.0, 1.0f},
+		{0.0, 0.0, 1.0, 1.0f},
+		{1.0, 1.0, 1.0, 1.0f},
+		// back colors
+		{1.0, 0.0, 0.0, 1.0f},
+		{0.0, 1.0, 0.0, 1.0f},
+		{0.0, 0.0, 1.0, 1.0f},
+		{1.0, 1.0, 1.0, 1.0f}
+	};
+
+	Mesh cubeMesh = { .points = cubeVertexBuffer, .indices = cubeIndexBuffer, .indexCount = 36, .colors = cubeColorBuffer, .isUniformColor = false };
+	
+	cube.mesh = cubeMesh;
+
+	gameObjectManagerAdd(&gameObjectManager, cube);
 
 	// enter loop
 	glutMainLoop();

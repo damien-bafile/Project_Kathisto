@@ -55,11 +55,12 @@ typedef struct GameObjectManager
 // contains all managers, e.g game object manager etc
 // not needed for this unit tbh
 
-void initGameObjectManager(GameObjectManager *gameObjectManager);
+void initGameObjectManager(GameObjectManager* gameObjectManager);
 void gameObjectManagerIncrease(GameObjectManager *gameObjectManager);
 void gameObjectManagerAdd(GameObjectManager *gameObjectManager, GameObject GameObject);
 void gameObjectManagerRemove(GameObjectManager *gameObjectManager, size_t id);
 GameObject* gameObjectManagerFind(GameObjectManager *gameObjectManager, size_t id);
+void updateGameObjects(GameObjectManager* gameObjectManager);
 
 void initGameObject(GameObject *gameObject); // initialise the game object
 void updateGameObject(GameObject *gameObject); // called every frame update

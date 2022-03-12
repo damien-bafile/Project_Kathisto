@@ -4,11 +4,12 @@
 #include <stdio.h>
 #include <GL/freeglut.h>
 
+#include "game/Game.h"
+
 #include "Events.h"
 #include "game/GameObjects/Camera.h"
 #include "game/GameObjects/Ground.h"
 #include "game/GameObjects/Cube.h"
-#include "game/Game.h"
 #include "math/Vector.h"
 
 
@@ -23,6 +24,8 @@ extern int currTime;
 extern float prevTime;
 extern float deltaTime;
 
+extern GameObjectManager gameObjectManager;
+
 // calculate the delta time
 void calculateDeltaTime(); 
 
@@ -33,4 +36,4 @@ void reshapeWindow(int width, int height);
 void windowRender(void); 
 
 // initialise the window with a name
-void initialiseWindow(int argc, char** argv, char* windowName);
+void initialiseWindow(int* argc, char** argv, char* windowName);
