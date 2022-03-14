@@ -112,44 +112,43 @@ void updateGameObject(float deltaTime, GameObject* gameObject)
 		return;
 	}
 
-	glMatrixMode(GL_MODELVIEW);
-	//glLoadIdentity();
 
 	glPushMatrix();
 	Mesh* mesh = &gameObject->mesh;
 	Vector3* pos = &gameObject->transform.position;
+	//pos->y += (1 * deltaTime);
+
 
 	Vector3* rot = &gameObject->transform.rotation;
-	rot->y += (deltaTime * 40);
+	//rot->y += (deltaTime * 20);
 
-	//glTranslatef(pos->x, pos->y, pos->z);
-	//glRotatef(rot->y, 0.0f, 0.0f, 1.0f);
+	glTranslatef(pos->x, pos->y, pos->z);
+
+	glRotatef(rot->y, 0.0f, 0.0f, 1.0f);
 
 
-	//pos->z += (5 * deltaTime);
-	//glTranslatef(pos->x, pos->y, pos->z);
 
 	const float gizmoSize = 3.0f;
 
 	// X
 	glColor3f(1.0f, 0.0f, 0.0f);
 	glBegin(GL_LINES);
-	glVertex3f(pos->x,pos->y, pos->z);
-	glVertex3f(gizmoSize + pos->x,pos->y,pos->z);
+	glVertex3f(0.0f, 0.0f, 0.0f);
+	glVertex3f(gizmoSize + 0.0f, 0.0f, 0.0f);
 	glEnd();
 
 	// Y
 	glColor3f(0.0f, 1.0f, 0.0f);
 	glBegin(GL_LINES);
-	glVertex3f(pos->x, pos->y, pos->z);
-	glVertex3f(pos->x, gizmoSize + pos->y, pos->z);
+	glVertex3f(0.0f, 0.0f, 0.0f);
+	glVertex3f(0.0f, gizmoSize + 0.0f, 0.0f);
 	glEnd();
 
 	// Z
 	glColor3f(0.0f, 0.0f, 1.0f);
 	glBegin(GL_LINES);
-	glVertex3f(pos->x, pos->y, pos->z);
-	glVertex3f(pos->x, pos->y, gizmoSize + pos->z);
+	glVertex3f(0.0f, 0.0f, 0.0f);
+	glVertex3f(0.0f, 0.0f, gizmoSize + 0.0f);
 	glEnd();
 
 	drawMesh(gameObject->mesh);

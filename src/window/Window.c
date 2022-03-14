@@ -66,37 +66,38 @@ void initialiseWindow(int* argc, char** argv, char* windowName)
 	cube.name = "cube";
 
 	const Vector3 cubeVertexBuffer[] = {
-		// front
-		{ -1.0, 4.0,  1.0},
-		{1.0, 4.0,  1.0 },
-		{1.0,  6.0,  1.0},
-		{-1.0,  6.0,  1.0},
-		// back
-		{-1.0, 4.0, -1.0},
-		{ 1.0, 4.0, -1.0},
-		{ 1.0,  6.0, -1.0},
-		{-1.0,  6.0, -1.0}
+		{ -1.0, -1.0, -1.0 },
+		{ 1.0, -1.0, -1.0 },
+		{ -1.0,  1.0, -1.0 },
+		{ 1.0,  1.0, -1.0 },
+
+
+		{ 1.0,  1.0,  1.0 },
+		{ 1.0, -1.0,  1.0 },
+		{ -1.0,  1.0,  1.0 },
+		{ -1.0, -1.0,  1.0 },
 	};
+
 
 	const Vector3Int cubeIndexBuffer[] = {
 		// front
-		{0, 1, 2},
-		{2, 3, 0},
+		{0, 2, 1},
+		{1, 3, 2},
 		// right
-		{1, 5, 6},
-		{6, 2, 1},
-		// back
-		{7, 6, 5},
-		{5, 4, 7},
-		// left
-		{4, 0, 3},
-		{3, 7, 4},
-		// bottom
+		{1, 3, 4},
 		{4, 5, 1},
-		{1, 0, 4},
+		// back
+		{5, 4, 6},
+		{6, 7, 5},
+		// left
+		{7, 6, 0},
+		{0, 2, 6},
+		// bottom
+		{0, 1, 7},
+		{7, 5, 1},
 		// top
-		{3, 2, 6},
-		{6, 7, 3}
+		{2, 3, 6},
+		{6, 4, 3}
 	};
 
 	const RGBA cubeColorBuffer[] = {
@@ -119,18 +120,13 @@ void initialiseWindow(int* argc, char** argv, char* windowName)
 		.indexCount = 36,
 		.colors = cubeColorBuffer,
 		.isUniformColor = false,
-		.debug = true
+		.debug = false
 	};
 
 	cube.mesh = cubeMesh;
 	calculateMeshBoundBox(&cube.mesh);
 
-
-	cube.transform.position = (Vector3) { 
-		(cube.mesh.minPosition.x + cube.mesh.maxPosition.x) / 2,
-		(cube.mesh.minPosition.y + cube.mesh.maxPosition.y) / 2,
-		(cube.mesh.minPosition.z + cube.mesh.maxPosition.z) / 2 
-	};
+	cube.transform.position = (Vector3){ 5.0f, 4.0f, 0.0f };
 
 	gameObjectManagerAdd(&gameObjectManager, cube);
 
