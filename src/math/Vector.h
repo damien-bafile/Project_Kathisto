@@ -59,6 +59,9 @@ Vector3 Vec3Normalize(Vector3 vec);
 Vector2 Vec2ScalarMultiply(Vector2 vec, float scalar);
 Vector3 Vec3ScalarMultiply(Vector3 vec, float scalar);
 
+Vector2 Vec2ScalarAdd(Vector2 vec, float scalar);
+Vector3 Vec3ScalarAdd(Vector3 vec, float scalar);
+
 Vector2 Vec2Multiply(Vector2 vec1, Vector2 vec2);
 Vector3 Vec3Multiply(Vector3 vec1, Vector3 vec2);
 

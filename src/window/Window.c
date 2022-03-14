@@ -78,7 +78,6 @@ void initialiseWindow(int* argc, char** argv, char* windowName)
 		{ -1.0, -1.0,  1.0 },
 	};
 
-
 	const Vector3Int cubeIndexBuffer[] = {
 		// front
 		{0, 2, 1},
@@ -127,6 +126,7 @@ void initialiseWindow(int* argc, char** argv, char* windowName)
 	calculateMeshBoundBox(&cube.mesh);
 
 	cube.transform.position = (Vector3){ 5.0f, 4.0f, 0.0f };
+	cube.transform.scale = (Vector3){ 5.0f, 1.0f, 1.0f };
 
 	gameObjectManagerAdd(&gameObjectManager, cube);
 

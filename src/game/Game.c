@@ -116,42 +116,52 @@ void updateGameObject(float deltaTime, GameObject* gameObject)
 	glPushMatrix();
 	Mesh* mesh = &gameObject->mesh;
 	Vector3* pos = &gameObject->transform.position;
-	//pos->y += (1 * deltaTime);
+	pos->y += (1 * deltaTime);
 
 
 	Vector3* rot = &gameObject->transform.rotation;
-	//rot->y += (deltaTime * 20);
+	rot->x += (deltaTime * 20);
+	rot->y += (deltaTime * 20);
+	rot->z += (deltaTime * 20);
+
+	Vector3* scale = &gameObject->transform.scale;
+	//scale->x += (deltaTime * 2);
 
 	glTranslatef(pos->x, pos->y, pos->z);
 
-	glRotatef(rot->y, 0.0f, 0.0f, 1.0f);
+	glRotatef(rot->x, 1.0f, 0.0f, 0.0f);
+	glRotatef(rot->y, 0.0f, 1.0f, 0.0f);
+	glRotatef(rot->z, 0.0f, 0.0f, 1.0f);
+
+	glScalef(scale->x, scale->y, scale->z);
+
+	drawMesh(gameObject->mesh);
 
 
+	Vector3 gizmoSize =Vec3ScalarAdd(mesh->maxPosition, 1.5f);
 
-	const float gizmoSize = 3.0f;
 
 	// X
 	glColor3f(1.0f, 0.0f, 0.0f);
 	glBegin(GL_LINES);
 	glVertex3f(0.0f, 0.0f, 0.0f);
-	glVertex3f(gizmoSize + 0.0f, 0.0f, 0.0f);
+	glVertex3f(gizmoSize.x, 0.0f, 0.0f);
 	glEnd();
 
 	// Y
 	glColor3f(0.0f, 1.0f, 0.0f);
 	glBegin(GL_LINES);
 	glVertex3f(0.0f, 0.0f, 0.0f);
-	glVertex3f(0.0f, gizmoSize + 0.0f, 0.0f);
+	glVertex3f(0.0f, gizmoSize.y, 0.0f);
 	glEnd();
 
 	// Z
 	glColor3f(0.0f, 0.0f, 1.0f);
 	glBegin(GL_LINES);
 	glVertex3f(0.0f, 0.0f, 0.0f);
-	glVertex3f(0.0f, 0.0f, gizmoSize + 0.0f);
+	glVertex3f(0.0f, 0.0f, gizmoSize.z);
 	glEnd();
 
-	drawMesh(gameObject->mesh);
 
 	glPopMatrix();
 }
@@ -193,13 +203,6 @@ void initMesh(Mesh* mesh)
 void calculateMeshBoundBox(Mesh* mesh)
 {
 	if (mesh->points == NULL || mesh->pointSize == 0) return;
-
-	// loop over each each vertex
-	// compare the x y z for min and max
-	//min = arr[0]
-	// max = arr[0]
-	//if(arr[i] < min) min = arr[i]
-	// if(arr[i] > max) max = arr[i]
 
 	Vector3 min = mesh->points[0];
 	Vector3 max = mesh->points[0];
