@@ -13,15 +13,21 @@ typedef struct Transform
 	Vector3 position;
 	Vector3 rotation;
 	Vector3 scale;
+	
 } Transform;
 
 typedef struct Mesh
 {
 	Vector3* points;
-	int* indices;
+	size_t pointSize;
+	Vector3Int* indices;
 	int indexCount;
 	RGBA* colors;
 	bool isUniformColor;
+
+	Vector3 minPosition;
+	Vector3 maxPosition;
+	bool debug;
 } Mesh;
 
 typedef struct RigidBody
@@ -60,17 +66,18 @@ void gameObjectManagerIncrease(GameObjectManager *gameObjectManager);
 void gameObjectManagerAdd(GameObjectManager *gameObjectManager, GameObject GameObject);
 void gameObjectManagerRemove(GameObjectManager *gameObjectManager, size_t id);
 GameObject* gameObjectManagerFind(GameObjectManager *gameObjectManager, size_t id);
-void updateGameObjects(GameObjectManager* gameObjectManager);
+void updateGameObjects(float deltaTime, GameObjectManager* gameObjectManager);
 
 void initGameObject(GameObject *gameObject); // initialise the game object
-void updateGameObject(GameObject *gameObject); // called every frame update
-void fixedUpdateGameObject(GameObject *gameObject); // called on physics update
+void updateGameObject(float deltaTime, GameObject *gameObject); // called every frame update
+void fixedUpdateGameObject(float deltaTime, GameObject *gameObject); // called on physics update
 void freeGameObject(GameObject *gameObject); // free the game object
 
 void initTransform(Transform *transform);
 void initMesh(Mesh *mesh);
 void initRigidBody(RigidBody *RigidBody);
 
+void calculateMeshBoundBox(Mesh* mesh);
 void freeMesh(Mesh *mesh);
 
 void drawMesh(Mesh mesh); // draw a mesh

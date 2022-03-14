@@ -15,7 +15,6 @@ GameObjectManager gameObjectManager;
 
 void initialiseWindow(int* argc, char** argv, char* windowName)
 {
-
 	// initialise GLUT, with debug logs
 	glutInit(argc, argv);
 	glutInitContextFlags(GLUT_DEBUG);
@@ -64,6 +63,7 @@ void initialiseWindow(int* argc, char** argv, char* windowName)
 
 	GameObject cube;
 	initGameObject(&cube);
+	cube.name = "cube";
 
 	const Vector3 cubeVertexBuffer[] = {
 		// front
@@ -115,14 +115,24 @@ void initialiseWindow(int* argc, char** argv, char* windowName)
 	Mesh cubeMesh = {
 		.points = cubeVertexBuffer,
 		.indices = cubeIndexBuffer,
+		.pointSize = 8,
 		.indexCount = 36,
 		.colors = cubeColorBuffer,
-		.isUniformColor = false };
+		.isUniformColor = false,
+		.debug = true
+	};
 
 	cube.mesh = cubeMesh;
+	calculateMeshBoundBox(&cube.mesh);
+
+
+	cube.transform.position = (Vector3) { 
+		(cube.mesh.minPosition.x + cube.mesh.maxPosition.x) / 2,
+		(cube.mesh.minPosition.y + cube.mesh.maxPosition.y) / 2,
+		(cube.mesh.minPosition.z + cube.mesh.maxPosition.z) / 2 
+	};
 
 	gameObjectManagerAdd(&gameObjectManager, cube);
-
 
 
 	GameObject floor;
@@ -149,11 +159,13 @@ void initialiseWindow(int* argc, char** argv, char* windowName)
 	Mesh floorMesh = {
 		.points = floorVertexBuffer,
 		.indices = floorIndexBuffer,
+		.pointSize = 4,
 		.indexCount = 6,
 		.colors = floorColorBuffer,
 		.isUniformColor = true };
 
 	floor.mesh = floorMesh;
+	calculateMeshBoundBox(&floor.mesh);
 	gameObjectManagerAdd(&gameObjectManager, floor);
 
 	// enter loop
@@ -177,7 +189,7 @@ void windowRender(void)
 
 	// ======= GAME OBJECTS RENDER  ======= \\
 	
-	updateGameObjects(&gameObjectManager);
+	updateGameObjects(deltaTime, &gameObjectManager);
 
 	// ======================================= \\
 

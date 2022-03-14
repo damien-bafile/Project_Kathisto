@@ -2,179 +2,262 @@
 
 void initGameObjectManager(GameObjectManager* gameObjectManager)
 {
-    const size_t count = 20u;
-    gameObjectManager->count = count;
-    gameObjectManager->gameObjects = malloc(count * sizeof(GameObject));
-    gameObjectManager->lastIndex = 0u;
-    gameObjectManager->freeSpace = count;
+	const size_t count = 20u;
+	gameObjectManager->count = count;
+	gameObjectManager->gameObjects = malloc(count * sizeof(GameObject));
+	gameObjectManager->lastIndex = 0u;
+	gameObjectManager->freeSpace = count;
 
-    if (gameObjectManager->gameObjects == NULL) return;
-    for (size_t i = 0; i < count; i++)
-    {
-        initGameObject(&gameObjectManager->gameObjects[i]);
-    }
+	if (gameObjectManager->gameObjects == NULL) return;
+	for (size_t i = 0; i < count; i++)
+	{
+		initGameObject(&gameObjectManager->gameObjects[i]);
+	}
 }
 
-void gameObjectManagerIncrease(GameObjectManager *gameObjectManager)
+void gameObjectManagerIncrease(GameObjectManager* gameObjectManager)
 {
-    const size_t newCount = gameObjectManager->count + (gameObjectManager->count / 2);
-    GameObject *temp = realloc(gameObjectManager->gameObjects, newCount * sizeof(GameObject));
-    if(temp)
-    {
-        gameObjectManager->gameObjects = temp;
+	const size_t newCount = gameObjectManager->count + (gameObjectManager->count / 2);
+	GameObject* temp = realloc(gameObjectManager->gameObjects, newCount * sizeof(GameObject));
+	if (temp)
+	{
+		gameObjectManager->gameObjects = temp;
 
-        for (size_t i = gameObjectManager->count; i < newCount; i++)
-        {
-            initGameObject(&gameObjectManager->gameObjects[i]);
-        }
+		for (size_t i = gameObjectManager->count; i < newCount; i++)
+		{
+			initGameObject(&gameObjectManager->gameObjects[i]);
+		}
 
-        gameObjectManager->count += newCount;
-        gameObjectManager->freeSpace += newCount;
-    }
+		gameObjectManager->count += newCount;
+		gameObjectManager->freeSpace += newCount;
+	}
 }
 
 /**
- * @brief 
+ * @brief
  * 	When a GameObject is added:
 		add the game object to the end of the game object list at index of count using realloc
 		increase count by 1
- * @param gameObjectManager 
- * @param gameObject 
+ * @param gameObjectManager
+ * @param gameObject
  */
-void gameObjectManagerAdd(GameObjectManager *gameObjectManager, GameObject gameObject)
+void gameObjectManagerAdd(GameObjectManager* gameObjectManager, GameObject gameObject)
 {
-    if(gameObjectManager->freeSpace == 0)
-        gameObjectManagerIncrease(gameObjectManager);
+	if (gameObjectManager->freeSpace == 0)
+		gameObjectManagerIncrease(gameObjectManager);
 
-    gameObject.id = gameObjectManager->lastIndex;
+	gameObject.id = gameObjectManager->lastIndex;
 
-    gameObjectManager->gameObjects[gameObjectManager->lastIndex] = gameObject; // test this
+	gameObjectManager->gameObjects[gameObjectManager->lastIndex] = gameObject; // test this
 
-    gameObjectManager->freeSpace--;
-    gameObjectManager->lastIndex++;
+	gameObjectManager->freeSpace--;
+	gameObjectManager->lastIndex++;
 }
 
 /**
- * @brief 
+ * @brief
  * When a GameObject is removed:
 		remove the gameobject from the game object list by setting by freeing it
 		for all gameobjects where index > deleted index
 		copy the gameobject over to gameobject[i - 1]
 		take 1 from count
-        freespace add 1
-        lastIndex take 1
- * @param gameObjectManager 
- * @param id 
+		freespace add 1
+		lastIndex take 1
+ * @param gameObjectManager
+ * @param id
  */
-void gameObjectManagerRemove(GameObjectManager *gameObjectManager, size_t id)
+void gameObjectManagerRemove(GameObjectManager* gameObjectManager, size_t id)
 {
-    freeGameObject(&gameObjectManager->gameObjects[id]);
-    for (size_t i = id + 1; i < gameObjectManager->count; i++)
-    {
-        gameObjectManager->gameObjects[i - 1] = gameObjectManager->gameObjects[i];
-        gameObjectManager->gameObjects[i - 1].id = i - 1;
-        if(i == gameObjectManager->count - 1)
-        freeGameObject(&gameObjectManager->gameObjects[i]);
-    }
-    
-    gameObjectManager->count--;
-    gameObjectManager->freeSpace++;
-    gameObjectManager->lastIndex--;
+	freeGameObject(&gameObjectManager->gameObjects[id]);
+	for (size_t i = id + 1; i < gameObjectManager->count; i++)
+	{
+		gameObjectManager->gameObjects[i - 1] = gameObjectManager->gameObjects[i];
+		gameObjectManager->gameObjects[i - 1].id = i - 1;
+		if (i == gameObjectManager->count - 1)
+			freeGameObject(&gameObjectManager->gameObjects[i]);
+	}
+
+	gameObjectManager->count--;
+	gameObjectManager->freeSpace++;
+	gameObjectManager->lastIndex--;
 }
 
-GameObject* gameObjectManagerFind(GameObjectManager *gameObjectManager, size_t id)
+GameObject* gameObjectManagerFind(GameObjectManager* gameObjectManager, size_t id)
 {
-    return &gameObjectManager->gameObjects[id];
+	return &gameObjectManager->gameObjects[id];
 }
 
-void updateGameObjects(GameObjectManager* gameObjectManager)
+void updateGameObjects(float deltaTime, GameObjectManager* gameObjectManager)
 {
-    for (size_t i = 0; i < gameObjectManager->lastIndex; i++)
-    {
-        updateGameObject(&gameObjectManager->gameObjects[i]);
-    }
+	for (size_t i = 0; i < gameObjectManager->lastIndex; i++)
+	{
+		updateGameObject(deltaTime, &gameObjectManager->gameObjects[i]);
+	}
 }
 
 void initGameObject(GameObject* gameObject)
 {
-    gameObject->id = NULL;
-    gameObject->name = NULL;
-    initTransform(&gameObject->transform);
-    initMesh(&gameObject->mesh);
-    initRigidBody(&gameObject->rigidBody);
+	gameObject->id = NULL;
+	gameObject->name = NULL;
+	initTransform(&gameObject->transform);
+	initMesh(&gameObject->mesh);
+	initRigidBody(&gameObject->rigidBody);
 }
 
-void updateGameObject(GameObject* gameObject)
+void updateGameObject(float deltaTime, GameObject* gameObject)
 {
-    drawMesh(gameObject->mesh);
+	if (gameObject->id != 0)
+	{
+		drawMesh(gameObject->mesh);
+		return;
+	}
+
+	glMatrixMode(GL_MODELVIEW);
+	//glLoadIdentity();
+
+	glPushMatrix();
+	Mesh* mesh = &gameObject->mesh;
+	Vector3* pos = &gameObject->transform.position;
+
+	Vector3* rot = &gameObject->transform.rotation;
+	rot->y += (deltaTime * 40);
+
+	//glTranslatef(pos->x, pos->y, pos->z);
+	//glRotatef(rot->y, 0.0f, 0.0f, 1.0f);
+
+
+	//pos->z += (5 * deltaTime);
+	//glTranslatef(pos->x, pos->y, pos->z);
+
+	const float gizmoSize = 3.0f;
+
+	// X
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glBegin(GL_LINES);
+	glVertex3f(pos->x,pos->y, pos->z);
+	glVertex3f(gizmoSize + pos->x,pos->y,pos->z);
+	glEnd();
+
+	// Y
+	glColor3f(0.0f, 1.0f, 0.0f);
+	glBegin(GL_LINES);
+	glVertex3f(pos->x, pos->y, pos->z);
+	glVertex3f(pos->x, gizmoSize + pos->y, pos->z);
+	glEnd();
+
+	// Z
+	glColor3f(0.0f, 0.0f, 1.0f);
+	glBegin(GL_LINES);
+	glVertex3f(pos->x, pos->y, pos->z);
+	glVertex3f(pos->x, pos->y, gizmoSize + pos->z);
+	glEnd();
+
+	drawMesh(gameObject->mesh);
+
+	glPopMatrix();
 }
 
-void fixedUpdateGameObject(GameObject* gameObject)
+void fixedUpdateGameObject(float deltaTime, GameObject* gameObject)
 {
 
 }
 
 void freeGameObject(GameObject* gameObject)
 {
-    free(gameObject->name);
-    gameObject->name = NULL;
+	free(gameObject->name);
+	gameObject->name = NULL;
 
-    freeMesh(&gameObject->mesh);
-    free(gameObject);
-    gameObject = NULL;
+	freeMesh(&gameObject->mesh);
+	free(gameObject);
+	gameObject = NULL;
 
 }
 
-void initTransform(Transform *transform)
+void initTransform(Transform* transform)
 {
-    transform->position = EmptyVec3();
-    transform->rotation = EmptyVec3();
-    transform->scale = (Vector3){1.0f, 1.0f, 1.0f};
+	transform->position = EmptyVec3();
+	transform->rotation = EmptyVec3();
+	transform->scale = (Vector3){ 1.0f, 1.0f, 1.0f };
 }
 
 void initMesh(Mesh* mesh)
 {
-    mesh->points = NULL;
-    mesh->indices = NULL;
-    mesh->indexCount = 0;
-    mesh->colors = NULL;
-    mesh->isUniformColor = false;
+	mesh->points = NULL;
+	mesh->indices = NULL;
+	mesh->indexCount = 0;
+	mesh->colors = NULL;
+	mesh->isUniformColor = false;
+	mesh->minPosition = EmptyVec3();
+	mesh->maxPosition = EmptyVec3();
+}
+
+void calculateMeshBoundBox(Mesh* mesh)
+{
+	if (mesh->points == NULL || mesh->pointSize == 0) return;
+
+	// loop over each each vertex
+	// compare the x y z for min and max
+	//min = arr[0]
+	// max = arr[0]
+	//if(arr[i] < min) min = arr[i]
+	// if(arr[i] > max) max = arr[i]
+
+	Vector3 min = mesh->points[0];
+	Vector3 max = mesh->points[0];
+
+	for (size_t i = 0; i < mesh->pointSize; i++)
+	{
+		if (mesh->points[i].x < min.x) min.x = mesh->points[i].x;
+		if (mesh->points[i].y < min.y) min.y = mesh->points[i].y;
+		if (mesh->points[i].z < min.z) min.z = mesh->points[i].z;
+
+		if (mesh->points[i].x > max.x) max.x = mesh->points[i].x;
+		if (mesh->points[i].y > max.y) max.y = mesh->points[i].y;
+		if (mesh->points[i].z > max.z) max.z = mesh->points[i].z;
+	}
+
+	printf("%f %f %f\n", min.x, min.y, min.z);
+	printf("%f %f %f\n", max.x, max.y, max.z);
+
+	mesh->minPosition = min;
+	mesh->maxPosition = max;
 }
 
 void initRigidBody(RigidBody* rigidBody)
 {
-    rigidBody->isStatic = false;
-    rigidBody->useGravity = false;
-    rigidBody->mass = 0.0f;
-    rigidBody->velocity = 0.0f;
+	rigidBody->isStatic = false;
+	rigidBody->useGravity = false;
+	rigidBody->mass = 0.0f;
+	rigidBody->velocity = 0.0f;
 }
 
-void freeMesh(Mesh *mesh)
+void freeMesh(Mesh* mesh)
 {
-    free(mesh->points);
-    free(mesh->indices);
-    free(mesh->colors);
+	free(mesh->points);
+	free(mesh->indices);
+	free(mesh->colors);
 
-    free(mesh);
-    mesh = NULL;
+	free(mesh);
+	mesh = NULL;
 }
 
 void drawMesh(Mesh mesh)
 {
-    if(!mesh.isUniformColor) glEnableClientState(GL_COLOR_ARRAY);
+	if (!mesh.isUniformColor) glEnableClientState(GL_COLOR_ARRAY);
 
-    if (mesh.isUniformColor) 
-        glColor4f(mesh.colors[0].r, mesh.colors[0].g, mesh.colors[0].b, mesh.colors[0].a);
-    else
-        glColorPointer(4, GL_FLOAT, 4, mesh.colors);
+	if (mesh.isUniformColor)
+		glColor4f(mesh.colors[0].r, mesh.colors[0].g, mesh.colors[0].b, mesh.colors[0].a);
+	else
+		glColorPointer(4, GL_FLOAT, 4, mesh.colors);
 
-    glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_VERTEX_ARRAY);
 
-    glVertexPointer(3, GL_FLOAT, 0, mesh.points);
-    glDrawElements(GL_TRIANGLES, mesh.indexCount, GL_UNSIGNED_INT, mesh.indices);
+	glVertexPointer(3, GL_FLOAT, 0, mesh.points);
 
-    glDisableClientState(GL_VERTEX_ARRAY);
-   if(!mesh.isUniformColor) glDisableClientState(GL_COLOR_ARRAY);
+	glDrawElements(mesh.debug ? GL_LINE_LOOP : GL_TRIANGLES, mesh.indexCount, GL_UNSIGNED_INT, mesh.indices);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	if (!mesh.isUniformColor) glDisableClientState(GL_COLOR_ARRAY);
 }
 
 void simulateRigidBody(RigidBody* RigidBody)
