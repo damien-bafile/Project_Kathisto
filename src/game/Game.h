@@ -69,7 +69,6 @@ GameObject* gameObjectManagerFind(GameObjectManager *gameObjectManager, size_t i
 void updateGameObjects(float deltaTime, GameObjectManager* gameObjectManager);
 
 void initGameObject(GameObject *gameObject); // initialise the game object
-void updateGameObject(float deltaTime, GameObject *gameObject); // called every frame update
 void fixedUpdateGameObject(float deltaTime, GameObject *gameObject); // called on physics update
 void freeGameObject(GameObject *gameObject); // free the game object
 
@@ -77,8 +76,13 @@ void initTransform(Transform *transform);
 void initMesh(Mesh *mesh);
 void initRigidBody(RigidBody *RigidBody);
 
+
+void updateGameObject(float deltaTime, GameObject* gameObject); // called every frame update
+void updateTransform(float deltaTime, Transform* transform);
+void updateMesh(float deltaTime, Mesh* mesh);
+void drawGizmos(float deltaTime, Vector3 maxSize);
+
 void calculateMeshBoundBox(Mesh* mesh);
 void freeMesh(Mesh *mesh);
 
-void drawMesh(Mesh mesh); // draw a mesh
 void simulateRigidBody(RigidBody *RigidBody); // simulate rigid body

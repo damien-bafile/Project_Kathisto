@@ -16,5 +16,5 @@ int main(int argc, char** argv)
 {
 	initialiseWindow(&argc, argv, "Project Kathisto");
 
-	return 1;
+	return 1;	
 }

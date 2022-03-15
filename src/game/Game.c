@@ -112,20 +112,30 @@ void updateGameObject(float deltaTime, GameObject* gameObject)
 		return;
 	}
 
-
 	glPushMatrix();
 	Mesh* mesh = &gameObject->mesh;
-	Vector3* pos = &gameObject->transform.position;
+	
+	updateTransform(deltaTime, &gameObject->transform);
+
+	updateMesh(deltaTime, mesh);
+
+	drawGizmos(deltaTime, mesh->maxPosition);
+	
+	glPopMatrix();
+}
+
+void updateTransform(float deltaTime, Transform* transform)
+{
+	Vector3* pos = &transform->position;
 	pos->y += (1 * deltaTime);
 
 
-	Vector3* rot = &gameObject->transform.rotation;
+	Vector3* rot = &transform->rotation;
 	rot->x += (deltaTime * 20);
 	rot->y += (deltaTime * 20);
 	rot->z += (deltaTime * 20);
 
-	Vector3* scale = &gameObject->transform.scale;
-	//scale->x += (deltaTime * 2);
+	Vector3* scale = &transform->scale;
 
 	glTranslatef(pos->x, pos->y, pos->z);
 
@@ -134,11 +144,30 @@ void updateGameObject(float deltaTime, GameObject* gameObject)
 	glRotatef(rot->z, 0.0f, 0.0f, 1.0f);
 
 	glScalef(scale->x, scale->y, scale->z);
+}
 
-	drawMesh(gameObject->mesh);
+void updateMesh(float deltaTime, Mesh* mesh)
+{
+	if (!mesh->isUniformColor) glEnableClientState(GL_COLOR_ARRAY);
 
+	if (mesh->isUniformColor)
+		glColor4f(mesh->colors[0].r, mesh->colors[0].g, mesh->colors[0].b, mesh->colors[0].a);
+	else
+		glColorPointer(4, GL_FLOAT, 4, mesh->colors);
 
-	Vector3 gizmoSize =Vec3ScalarAdd(mesh->maxPosition, 1.5f);
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	glVertexPointer(3, GL_FLOAT, 0, mesh->points);
+
+	glDrawElements(mesh->debug ? GL_LINE_LOOP : GL_TRIANGLES, mesh->indexCount, GL_UNSIGNED_INT, mesh->indices);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	if (!mesh->isUniformColor) glDisableClientState(GL_COLOR_ARRAY);
+}
+
+void drawGizmos(float deltaTime, Vector3 maxSize)
+{
+	Vector3 gizmoSize = Vec3ScalarAdd(maxSize, 1.5f);
 
 
 	// X
@@ -161,9 +190,6 @@ void updateGameObject(float deltaTime, GameObject* gameObject)
 	glVertex3f(0.0f, 0.0f, 0.0f);
 	glVertex3f(0.0f, 0.0f, gizmoSize.z);
 	glEnd();
-
-
-	glPopMatrix();
 }
 
 void fixedUpdateGameObject(float deltaTime, GameObject* gameObject)
@@ -241,25 +267,6 @@ void freeMesh(Mesh* mesh)
 
 	free(mesh);
 	mesh = NULL;
-}
-
-void drawMesh(Mesh mesh)
-{
-	if (!mesh.isUniformColor) glEnableClientState(GL_COLOR_ARRAY);
-
-	if (mesh.isUniformColor)
-		glColor4f(mesh.colors[0].r, mesh.colors[0].g, mesh.colors[0].b, mesh.colors[0].a);
-	else
-		glColorPointer(4, GL_FLOAT, 4, mesh.colors);
-
-	glEnableClientState(GL_VERTEX_ARRAY);
-
-	glVertexPointer(3, GL_FLOAT, 0, mesh.points);
-
-	glDrawElements(mesh.debug ? GL_LINE_LOOP : GL_TRIANGLES, mesh.indexCount, GL_UNSIGNED_INT, mesh.indices);
-
-	glDisableClientState(GL_VERTEX_ARRAY);
-	if (!mesh.isUniformColor) glDisableClientState(GL_COLOR_ARRAY);
 }
 
 void simulateRigidBody(RigidBody* RigidBody)

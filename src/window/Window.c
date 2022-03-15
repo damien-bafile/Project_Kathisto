@@ -126,7 +126,7 @@ void initialiseWindow(int* argc, char** argv, char* windowName)
 	calculateMeshBoundBox(&cube.mesh);
 
 	cube.transform.position = (Vector3){ 5.0f, 4.0f, 0.0f };
-	cube.transform.scale = (Vector3){ 5.0f, 1.0f, 1.0f };
+	cube.transform.scale = (Vector3){ 1.0f, 1.0f, 1.0f };
 
 	gameObjectManagerAdd(&gameObjectManager, cube);
 
