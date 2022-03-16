@@ -129,14 +129,7 @@ void updateGameObject(float deltaTime, GameObject* gameObject)
 void updateTransform(float deltaTime, Transform* transform)
 {
 	Vector3* pos = &transform->position;
-	//pos->y += (1 * deltaTime);
-
-
 	Vector3* rot = &transform->rotation;
-	//rot->x += (deltaTime * 20);
-	//rot->y += (deltaTime * 20);
-	//rot->z += (deltaTime * 20);
-
 	Vector3* scale = &transform->scale;
 
 	glTranslatef(pos->x, pos->y, pos->z);

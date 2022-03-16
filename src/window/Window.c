@@ -1,4 +1,5 @@
 #include "Window.h"
+#include <math.h>
 
 int WINDOW_WIDTH = 750;
 int WINDOW_HEIGHT = 750;
@@ -13,12 +14,25 @@ float deltaTime = 0.0f;
 
 GameObjectManager gameObjectManager;
 
+float lerp(float a, float b, float t)
+{
+	return a + t * (b - a);
+}
 
+float amplitude = 10.0f;
+float period = 5.0f;
 void onCubeUpdate(float deltaTime, GameObject* gameObject)
 {
-	//GameObject* obj = (GameObject*)gameObject;
 	Vector3* pos = &gameObject->transform.position;
-	pos->y += (1 * deltaTime);
+
+	float theta = (currTime / 1000.0f) / period;
+	float distance = amplitude * sin(theta);
+
+	//float hover = lerp(1.0f, 10.0f, (sin(currTime * 2.0f) + 1) / 2.0f);
+	printf("%f\n", theta);
+	//printf("%f\n", 4.0f + distance);
+
+	pos->y = 4.0f + distance;
 
 
 	Vector3* rot = &gameObject->transform.rotation;
@@ -78,19 +92,18 @@ void initialiseWindow(int* argc, char** argv, char* windowName)
 
 	GameObject cube;
 	initGameObject(&cube);
-	cube.name = "cube";
-
+	
 	const Vector3 cubeVertexBuffer[] = {
-		{ -1.0, -1.0, -1.0 },
-		{ 1.0, -1.0, -1.0 },
-		{ -1.0,  1.0, -1.0 },
-		{ 1.0,  1.0, -1.0 },
+		{ -1.0f, -1.0f, -1.0f },
+		{ 1.0f, -1.0f, -1.0f },
+		{ -1.0f,  1.0f, -1.0f },
+		{ 1.0f,  1.0f, -1.0f },
 
 
-		{ 1.0,  1.0,  1.0 },
-		{ 1.0, -1.0,  1.0 },
-		{ -1.0,  1.0,  1.0 },
-		{ -1.0, -1.0,  1.0 },
+		{ 1.0f,  1.0f,  1.0f },
+		{ 1.0f, -1.0f,  1.0f },
+		{ -1.0f,  1.0f,  1.0f },
+		{ -1.0f, -1.0f,  1.0f },
 	};
 
 	const Vector3Int cubeIndexBuffer[] = {
@@ -116,15 +129,15 @@ void initialiseWindow(int* argc, char** argv, char* windowName)
 
 	const RGBA cubeColorBuffer[] = {
 		// front colors
-		{1.0, 0.0, 0.0, 1.0f},
-		{0.0, 1.0, 0.0, 1.0f},
-		{0.0, 0.0, 1.0, 1.0f},
-		{1.0, 1.0, 1.0, 1.0f},
+		{1.0f, 0.0f, 0.0f, 1.0f},
+		{0.0f, 1.0f, 0.0f, 1.0f},
+		{0.0f, 0.0f, 1.0f, 1.0f},
+		{1.0f, 1.0f, 1.0f, 1.0f},
 		// back colors
-		{1.0, 0.0, 0.0, 1.0f},
-		{0.0, 1.0, 0.0, 1.0f},
-		{0.0, 0.0, 1.0, 1.0f},
-		{1.0, 1.0, 1.0, 1.0f}
+		{1.0f, 0.0f, 0.0f, 1.0f},
+		{0.0f, 1.0f, 0.0f, 1.0f},
+		{0.0f, 0.0f, 1.0f, 1.0f},
+		{1.0f, 1.0f, 1.0f, 1.0f}
 	};
 
 	Mesh cubeMesh = {
@@ -136,6 +149,8 @@ void initialiseWindow(int* argc, char** argv, char* windowName)
 		.isUniformColor = false,
 		.debug = false
 	};
+
+	cube.name = "cube";
 
 	cube.mesh = cubeMesh;
 	calculateMeshBoundBox(&cube.mesh);
@@ -153,10 +168,17 @@ void initialiseWindow(int* argc, char** argv, char* windowName)
 
 	// position of each of the ground points
 	const Vector3 floorVertexBuffer[] = {
-		{-100.0f, 0.0f, -100.0f},
-		{-100.0f, 0.0f, 100.0f},
-		{100.0f, 0.0f, 100.0f},
-		{100.0f, 0.0f, -100.0f},
+		//{-100.0f, 0.0f, -100.0f},
+		//{-100.0f, 0.0f, 100.0f},
+		//{100.0f, 0.0f, 100.0f},
+		//{100.0f, 0.0f, -100.0f},
+
+
+		{ -1.0f, 0.0f, -1.0f },
+		{ -1.0f, 0.0f, 1.0f },
+		{ 1.0f,  0.0f, 1.0f },
+		{ 1.0f,  0.0f, -1.0f },
+
 	};
 
 	// index buffer on how to  the points
@@ -178,6 +200,8 @@ void initialiseWindow(int* argc, char** argv, char* windowName)
 		.isUniformColor = true };
 
 	floor.mesh = floorMesh;
+	floor.transform.scale = (Vector3){ 100.0f, 1.0f, 100.0f };
+
 	calculateMeshBoundBox(&floor.mesh);
 	gameObjectManagerAdd(&gameObjectManager, floor);
 
