@@ -37,11 +37,17 @@ void onCubeUpdate(float deltaTime, GameObject* gameObject)
 
 }
 
+struct ImGuiContext* ctx;
+struct ImGuiIO* io;
+
 void initialiseWindow(int* argc, char** argv, char* windowName)
 {
 	// initialise GLUT, with debug logs
 	glutInit(argc, argv);
 	glutInitContextFlags(GLUT_DEBUG);
+
+	ctx = igCreateContext(NULL);
+	io = igGetIO();
 
 	// set RGBA mode, double buffer window, and have a depth buffer
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);

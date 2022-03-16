@@ -15,6 +15,9 @@ add_subdirectory(src)
 # Add source to this project's executable.
 add_executable(${PROJECT_NAME} ${SOURCES})
 
+target_compile_definitions(${PROJECT_NAME} PRIVATE 
+	IMGUI_IMPL_API=\ )
+
 add_subdirectory(lib)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
