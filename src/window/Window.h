@@ -5,9 +5,6 @@
 #include <GL/freeglut.h>
 
 
-#include <cimgui.h>
-
-
 #include "game/Game.h"
 
 #include "Events.h"
@@ -17,9 +14,6 @@
 
 extern int WINDOW_WIDTH;
 extern int WINDOW_HEIGHT;
-
-struct ImGuiContext* ctx;
-struct ImGuiIO* io;
 
 extern int frame;
 extern int timebase;
