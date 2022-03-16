@@ -19,20 +19,20 @@ float lerp(float a, float b, float t)
 	return a + t * (b - a);
 }
 
-float amplitude = 10.0f;
-float period = 2.0f;
+
 void onCubeUpdate(float deltaTime, GameObject* gameObject)
 {
 	Vector3* pos = &gameObject->transform.position;
 
-	float theta = (currTime / 1000.0f) / period;
-	float distance = amplitude * sin(theta);
+	float amplitude = 2.0f;
+	float period = 2.0f;
 
-	//float hover = lerp(1.0f, 10.0f, (sin((currTime / 1000.0f) * 2.0f) + 1) / 2.0f);
-	//printf("%f\n", 4.0f + distance);
+	float theta = (currTime / 1000.0f) * period;
+	float distance = sin(theta) / amplitude;
 
-	//pos->y = hover;
-	pos->y = 4.0f + distance;
+	float hover = lerp(6.0f, 12.0f, distance);
+
+	pos->y = hover;
 
 
 	Vector3* rot = &gameObject->transform.rotation;
