@@ -39,14 +39,21 @@ typedef struct RigidBody
 
 } RigidBody;
 
-typedef struct GameObject
+typedef struct GameObject GameObject;
+
+struct GameObject
 {
-	uint32_t id;
+	size_t id;
 	char *name;
 	Transform transform;
 	Mesh mesh;
 	RigidBody rigidBody;
-} GameObject;
+	bool debug;
+
+	void (*onStart)(GameObject*);
+	void (*onUpdate)(float, GameObject*);
+	void (*onFixedUpdate)(float, GameObject*);
+};
 
 typedef struct GameObjectManager
 {

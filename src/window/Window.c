@@ -13,6 +13,21 @@ float deltaTime = 0.0f;
 
 GameObjectManager gameObjectManager;
 
+
+void onCubeUpdate(float deltaTime, GameObject* gameObject)
+{
+	//GameObject* obj = (GameObject*)gameObject;
+	Vector3* pos = &gameObject->transform.position;
+	pos->y += (1 * deltaTime);
+
+
+	Vector3* rot = &gameObject->transform.rotation;
+	rot->x += (deltaTime * 20);
+	rot->y += (deltaTime * 20);
+	rot->z += (deltaTime * 20);
+
+}
+
 void initialiseWindow(int* argc, char** argv, char* windowName)
 {
 	// initialise GLUT, with debug logs
@@ -128,6 +143,8 @@ void initialiseWindow(int* argc, char** argv, char* windowName)
 	cube.transform.position = (Vector3){ 5.0f, 4.0f, 0.0f };
 	cube.transform.scale = (Vector3){ 1.0f, 1.0f, 1.0f };
 
+	cube.onUpdate = &onCubeUpdate;
+
 	gameObjectManagerAdd(&gameObjectManager, cube);
 
 
@@ -188,7 +205,6 @@ void windowRender(void)
 	updateGameObjects(deltaTime, &gameObjectManager);
 
 	// ======================================= \\
-
 
 	// swap the buffers
 	glutSwapBuffers();

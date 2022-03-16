@@ -97,29 +97,31 @@ void updateGameObjects(float deltaTime, GameObjectManager* gameObjectManager)
 
 void initGameObject(GameObject* gameObject)
 {
-	gameObject->id = NULL;
+	gameObject->id = 0;
 	gameObject->name = NULL;
 	initTransform(&gameObject->transform);
 	initMesh(&gameObject->mesh);
 	initRigidBody(&gameObject->rigidBody);
+	gameObject->debug = false;
+	gameObject->onStart = NULL;
+	gameObject->onUpdate = NULL;
+	gameObject->onFixedUpdate = NULL;
 }
 
 void updateGameObject(float deltaTime, GameObject* gameObject)
 {
-	if (gameObject->id != 0)
-	{
-		drawMesh(gameObject->mesh);
-		return;
-	}
-
 	glPushMatrix();
+
+	if(gameObject->onUpdate != NULL) gameObject->onUpdate(deltaTime, gameObject);
+
 	Mesh* mesh = &gameObject->mesh;
 	
 	updateTransform(deltaTime, &gameObject->transform);
 
 	updateMesh(deltaTime, mesh);
 
-	drawGizmos(deltaTime, mesh->maxPosition);
+	if(gameObject->debug)
+		drawGizmos(deltaTime, mesh->maxPosition);
 	
 	glPopMatrix();
 }
@@ -127,13 +129,13 @@ void updateGameObject(float deltaTime, GameObject* gameObject)
 void updateTransform(float deltaTime, Transform* transform)
 {
 	Vector3* pos = &transform->position;
-	pos->y += (1 * deltaTime);
+	//pos->y += (1 * deltaTime);
 
 
 	Vector3* rot = &transform->rotation;
-	rot->x += (deltaTime * 20);
-	rot->y += (deltaTime * 20);
-	rot->z += (deltaTime * 20);
+	//rot->x += (deltaTime * 20);
+	//rot->y += (deltaTime * 20);
+	//rot->z += (deltaTime * 20);
 
 	Vector3* scale = &transform->scale;
 
@@ -168,7 +170,6 @@ void updateMesh(float deltaTime, Mesh* mesh)
 void drawGizmos(float deltaTime, Vector3 maxSize)
 {
 	Vector3 gizmoSize = Vec3ScalarAdd(maxSize, 1.5f);
-
 
 	// X
 	glColor3f(1.0f, 0.0f, 0.0f);
