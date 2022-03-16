@@ -8,9 +8,7 @@ add_compile_options(
 )
 
 add_subdirectory(freeglut)
-add_subdirectory(cimgui)
 
 target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC
     freeglut/include
-    cimgui
     )
