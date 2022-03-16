@@ -15,10 +15,20 @@ add_subdirectory(src)
 # Add source to this project's executable.
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-target_compile_definitions(${PROJECT_NAME} PRIVATE 
-	IMGUI_IMPL_API=\ )
 
 add_subdirectory(lib)
+
+
+set(cimgui lib/cimgui)
+set(imgui_impl lib/cimgui/imgui/backends)
+
+include_directories(${cimgui})
+include_directories(${cimgui}/imgui)
+include_directories(${imgui_impl})
+
+add_library(imgui_impl STATIC ${imgui_impl}/imgui_impl_opengl2.cpp ${imgui_impl}/imgui_impl_glut.cpp)
+add_definitions(-DIMGUI_IMPL_OPENGL_LOADER_GLUT)
+target_compile_definitions(imgui_impl PRIVATE IMGUI_IMPL_API=extern\ \"C\")
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
@@ -27,4 +37,6 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                 ${CMAKE_SOURCE_DIR}/assets $<TARGET_FILE_DIR:${PROJECT_NAME}>/assets)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC freeglut_static)
-target_link_libraries(${PROJECT_NAME} PUBLIC cimgui)
+
+target_compile_definitions(${PROJECT_NAME} PRIVATE IMGUI_IMPL_API=)
+
