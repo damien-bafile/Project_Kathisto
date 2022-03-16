@@ -1,5 +1,5 @@
 #include "Window.h"
-#include <math.h>
+#include "math/mathUtils.h"
 
 int WINDOW_WIDTH = 750;
 int WINDOW_HEIGHT = 750;
@@ -13,11 +13,6 @@ float prevTime = 0.0f;
 float deltaTime = 0.0f;
 
 GameObjectManager gameObjectManager;
-
-float lerp(float a, float b, float t)
-{
-	return a + t * (b - a);
-}
 
 
 void onCubeUpdate(float deltaTime, GameObject* gameObject)
