@@ -7,60 +7,42 @@ cmake_minimum_required (VERSION 3.8)
 set(PROJECT_NAME Project_Kathisto)
 project(${PROJECT_NAME} LANGUAGES C)
 
-
-
 find_package(OpenGL REQUIRED)
 
 add_subdirectory(src)
-
-# Add source to this project's executable.
-add_executable(${PROJECT_NAME} ${SOURCES})
 
 add_subdirectory(lib)
 
 # CIMGUI
 
+set(cimgui lib/cimgui)
+set(imgui_impl ${cimgui}/imgui/examples)
 
+include_directories(
+	${cimgui} 
+	${cimgui}/imgui ${imgui_impl})
 
-if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/lib/cimgui/imgui/backends)
-	set(BAKENDS_FOLDER "lib/cimgui/imgui/backends/")
-else()
-	set(BAKENDS_FOLDER "lib/cimgui/imgui/examples/")
-endif()
+file(GLOB 
+	cimgui_files 
+	"${cimgui}/*.cpp" 
+	"${cimgui}/imgui/*.cpp"
+	"${imgui_impl}/imgui_impl_glfw.cpp"
+	"${imgui_impl}/imgui_impl_opengl3.cpp")
+add_library(cimgui ${cimgui_files})
 
-if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/lib/cimgui/imgui/imgui_tables.cpp)
-	set(TABLES_SOURCE "lib/cimgui/imgui/imgui_tables.cpp")
-else()
-	set(TABLES_SOURCE "")
-endif()
-
-include_directories(lib/cimgui/imgui)
-add_definitions("-DIMGUI_DISABLE_OBSOLETE_FUNCTIONS=1")
-
-include_directories(lib/cimgui)
-set(IMGUI_SOURCES lib/cimgui/cimgui.cpp 
-lib/cimgui/imgui/imgui.cpp 
-lib/cimgui/imgui/imgui_draw.cpp 
-lib/cimgui/imgui/imgui_demo.cpp 
-lib/cimgui/imgui/imgui_widgets.cpp
-${TABLES_SOURCE} 
-)
-
-if (WIN32)
-    add_definitions("-DIMGUI_IMPL_API=extern \"C\" __declspec\(dllexport\)")
-else(WIN32)
-    add_definitions("-DIMGUI_IMPL_API=extern \"C\" ")
-endif(WIN32)
-
-add_compile_definitions("IMGUI_IMPL_OPENGL_LOADER_GLUT")
-
-
-list(APPEND IMGUI_SOURCES ${BAKENDS_FOLDER}imgui_impl_glut.cpp)
-target_include_directories(${PROJECT_NAME} PUBLIC ${IMGUI_SOURCES})
+target_compile_definitions(cimgui PRIVATE 
+	IMGUI_IMPL_API=extern\ \"C\"
+	IMGUI_IMPL_OPENGL_LOADER_GLUT)
 
 ##
 
+# Add source to this project's executable.
+add_executable(${PROJECT_NAME} ${SOURCES})
+
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
+
+target_compile_definitions(${project_name} PRIVATE 
+	IMGUI_IMPL_API=\ )
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy_directory
