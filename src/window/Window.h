@@ -4,8 +4,8 @@
 #include <stdio.h>
 #include <GL/freeglut.h>
 
-#define CIMGUI_DEFINE_ENUMS_AND_STRUCTS
-#include "cimgui.h"
+//#define CIMGUI_DEFINE_ENUMS_AND_STRUCTS
+//#include "cimgui.h"
 
 #include "game/Game.h"
 

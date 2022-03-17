@@ -46,10 +46,10 @@ void initialiseWindow(int* argc, char** argv, char* windowName)
 	glutInit(argc, argv);
 	glutInitContextFlags(GLUT_DEBUG);
 
-	ctx = igCreateContext(NULL);
-	io = igGetIO();
+	//ctx = igCreateContext(NULL);
+	//io = igGetIO();
 
-	ImGui_ImplGLUT_Init();
+	//ImGui_ImplGLUT_Init();
 
 	// set RGBA mode, double buffer window, and have a depth buffer
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);

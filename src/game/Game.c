@@ -238,9 +238,6 @@ void calculateMeshBoundBox(Mesh* mesh)
 		if (mesh->points[i].z > max.z) max.z = mesh->points[i].z;
 	}
 
-	printf("%f %f %f\n", min.x, min.y, min.z);
-	printf("%f %f %f\n", max.x, max.y, max.z);
-
 	mesh->minPosition = min;
 	mesh->maxPosition = max;
 }

@@ -20,31 +20,32 @@ add_executable(${PROJECT_NAME} ${SOURCES})
 add_subdirectory(lib)
 
 # set cimgui variables
-set(cimgui lib/cimgui)
-set(imgui_impl ${cimgui}/imgui/backends)
+#set(cimgui lib/cimgui)
+#set(imgui_impl ${cimgui}/imgui/backends)
 
 # include those folders
-include_directories(${cimgui})
-include_directories(${cimgui}/imgui)
-include_directories(${imgui_impl})
+#include_directories(${cimgui})
+#include_directories(${cimgui}/imgui)
+#include_directories(${imgui_impl})
 
-add_library(imgui_impl STATIC ${imgui_impl}/imgui_impl_opengl2.cpp ${imgui_impl}/imgui_impl_glut.cpp)
+#add_library(imgui_impl STATIC ${imgui_impl}/imgui_impl_opengl2.cpp ${imgui_impl}/imgui_impl_glut.cpp)
 
-add_definitions(-DIMGUI_IMPL_OPENGL_LOADER_GLUT)
+#add_definitions(-DIMGUI_IMPL_OPENGL_LOADER_GLUT)
 
-target_compile_definitions(${PROJECT_NAME} PRIVATE IMGUI_IMPL_API=extern\ \"C\")
+#target_compile_definitions(${PROJECT_NAME} PRIVATE IMGUI_IMPL_API=extern\ \"C\")
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 
-target_include_directories(imgui_impl SYSTEM PUBLIC lib/freeglut/include)
+#target_include_directories(imgui_impl SYSTEM PUBLIC lib/freeglut/include)
 
-target_link_libraries(imgui_impl PUBLIC freeglut_static cimgui)
+#target_link_libraries(imgui_impl PUBLIC freeglut_static cimgui)
 
 
-target_link_libraries(${PROJECT_NAME} freeglut_static imgui_impl)
+target_link_libraries(${PROJECT_NAME} freeglut_static)
+#target_link_libraries(${PROJECT_NAME} freeglut_static imgui_impl)
 
-target_compile_definitions(${PROJECT_NAME} PRIVATE IMGUI_IMPL_API=)
+#target_compile_definitions(${PROJECT_NAME} PRIVATE IMGUI_IMPL_API=)
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy_directory
