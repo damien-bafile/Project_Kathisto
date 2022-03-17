@@ -15,7 +15,24 @@ int currTime = 0;
 float prevTime = 0.0f;
 float deltaTime = 0.0f;
 
+struct ImGuiContext* ctx;
+struct ImGuiIO* io;
+
+bool showDemo = true;
+
 GameObjectManager gameObjectManager;
+
+void guiInit()
+{
+	ctx = igCreateContext(NULL);
+	io = igGetIO();
+	
+	igStyleColorsDark(NULL);
+
+	ImGui_ImplGLUT_Init();
+	ImGui_ImplGLUT_InstallFuncs();
+	ImGui_ImplOpenGL2_Init();
+}
 
 
 void onCubeUpdate(float deltaTime, GameObject* gameObject)
@@ -40,8 +57,7 @@ void onCubeUpdate(float deltaTime, GameObject* gameObject)
 
 }
 
-struct ImGuiContext* ctx;
-struct ImGuiIO* io;
+
 
 void initialiseWindow(int* argc, char** argv, char* windowName)
 {
@@ -49,10 +65,6 @@ void initialiseWindow(int* argc, char** argv, char* windowName)
 	glutInit(argc, argv);
 	glutInitContextFlags(GLUT_DEBUG);
 
-	ctx = igCreateContext(NULL);
-	io = igGetIO();
-
-	ImGui_ImplGLUT_Init();
 
 	// set RGBA mode, double buffer window, and have a depth buffer
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
@@ -63,6 +75,8 @@ void initialiseWindow(int* argc, char** argv, char* windowName)
 
 	// set window name
 	glutCreateWindow(windowName);
+
+	guiInit();
 
 	// callback functions
 
@@ -215,11 +229,36 @@ void initialiseWindow(int* argc, char** argv, char* windowName)
 	glutMainLoop();
 }
 
+void gui_update() {
+	ImGui_ImplOpenGL2_NewFrame();
+	ImGui_ImplGLUT_NewFrame();
+	//igNewFrame();
+
+	igShowDemoWindow(&showDemo);
+
+
+	//igRender();
+	
+	// // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway. 
+	// // Here we just want to make the demo initial state a bit more friendly!
+	// igSetNextWindowPos((struct ImVec2){0,0}, ImGuiCond_FirstUseEver,(struct ImVec2){0,0} ); 
+	//igShowDemoWindow(NULL);
+}
+
+void gui_render() {
+	igRender();
+	ImGui_ImplOpenGL2_RenderDrawData(igGetDrawData());
+}
+
+
 void windowRender(void)
 {
 
 	// calculate delta time (time since last frame)
 	calculateDeltaTime();
+
+
+	gui_update();
 
 	// clear the color and depth buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -236,6 +275,7 @@ void windowRender(void)
 
 	// ======================================= \\
 
+	gui_render();
 	// swap the buffers
 	glutSwapBuffers();
 }
@@ -250,6 +290,7 @@ void calculateDeltaTime()
 
 void reshapeWindow(int width, int height)
 {
+	ImGui_ImplGLUT_ReshapeFunc();
 	// if height is 0 then set it 1
 	if (height == 0) height = 1;
 
