@@ -4,7 +4,7 @@
 #include "cimgui.h"
 #include "math/mathUtils.h"
 
-int WINDOW_WIDTH = 750;
+int WINDOW_WIDTH = 1280;
 int WINDOW_HEIGHT = 750;
 
 int frame = 0;
@@ -70,7 +70,7 @@ void initialiseWindow(int* argc, char** argv, char* windowName)
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 
 	// set the window starting position and size
-	glutInitWindowPosition(200, 200);
+	glutInitWindowPosition(100, 0);
 	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 
 	// set window name
