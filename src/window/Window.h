@@ -6,6 +6,8 @@
 
 #include "game/Game.h"
 
+#include "gui/Gui.h"
+
 #include "Events.h"
 #include "game/GameObjects/Camera.h"
 #include "math/Vector.h"

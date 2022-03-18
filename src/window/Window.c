@@ -1,7 +1,6 @@
 #include "Window.h"
 
-#define CIMGUI_DEFINE_ENUMS_AND_STRUCTS
-#include "cimgui.h"
+
 #include "math/mathUtils.h"
 
 int WINDOW_WIDTH = 1280;
@@ -15,24 +14,8 @@ int currTime = 0;
 float prevTime = 0.0f;
 float deltaTime = 0.0f;
 
-struct ImGuiContext* ctx;
-struct ImGuiIO* io;
-
-bool showDemo = true;
 
 GameObjectManager gameObjectManager;
-
-void guiInit()
-{
-	ctx = igCreateContext(NULL);
-	io = igGetIO();
-	
-	igStyleColorsDark(NULL);
-
-	ImGui_ImplGLUT_Init();
-	ImGui_ImplGLUT_InstallFuncs();
-	ImGui_ImplOpenGL2_Init();
-}
 
 
 void onCubeUpdate(float deltaTime, GameObject* gameObject)
@@ -58,7 +41,6 @@ void onCubeUpdate(float deltaTime, GameObject* gameObject)
 }
 
 
-
 void initialiseWindow(int* argc, char** argv, char* windowName)
 {
 	// initialise GLUT, with debug logs
@@ -76,7 +58,8 @@ void initialiseWindow(int* argc, char** argv, char* windowName)
 	// set window name
 	glutCreateWindow(windowName);
 
-	guiInit();
+	// Initialise the GUI
+	GuiInit();
 
 	// callback functions
 
@@ -227,27 +210,9 @@ void initialiseWindow(int* argc, char** argv, char* windowName)
 
 	// enter loop
 	glutMainLoop();
-}
 
-void gui_update() {
-	ImGui_ImplOpenGL2_NewFrame();
-	ImGui_ImplGLUT_NewFrame();
-	//igNewFrame();
-
-	igShowDemoWindow(&showDemo);
-
-
-	//igRender();
-	
-	// // Normally user code doesn't need/want to call this because positions are saved in .ini file anyway. 
-	// // Here we just want to make the demo initial state a bit more friendly!
-	// igSetNextWindowPos((struct ImVec2){0,0}, ImGuiCond_FirstUseEver,(struct ImVec2){0,0} ); 
-	//igShowDemoWindow(NULL);
-}
-
-void gui_render() {
-	igRender();
-	ImGui_ImplOpenGL2_RenderDrawData(igGetDrawData());
+	// on program close
+	GuiFree();
 }
 
 
@@ -257,8 +222,7 @@ void windowRender(void)
 	// calculate delta time (time since last frame)
 	calculateDeltaTime();
 
-
-	gui_update();
+	GuiUpdate(&gameObjectManager);
 
 	// clear the color and depth buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -275,7 +239,8 @@ void windowRender(void)
 
 	// ======================================= \\
 
-	gui_render();
+	GuiRender();
+
 	// swap the buffers
 	glutSwapBuffers();
 }
