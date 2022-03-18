@@ -1,7 +1,9 @@
 #include "Window.h"
+
+
 #include "math/mathUtils.h"
 
-int WINDOW_WIDTH = 750;
+int WINDOW_WIDTH = 1280;
 int WINDOW_HEIGHT = 750;
 
 int frame = 0;
@@ -11,6 +13,7 @@ int fps = 0;
 int currTime = 0;
 float prevTime = 0.0f;
 float deltaTime = 0.0f;
+
 
 GameObjectManager gameObjectManager;
 
@@ -37,8 +40,6 @@ void onCubeUpdate(float deltaTime, GameObject* gameObject)
 
 }
 
-struct ImGuiContext* ctx;
-struct ImGuiIO* io;
 
 void initialiseWindow(int* argc, char** argv, char* windowName)
 {
@@ -46,20 +47,19 @@ void initialiseWindow(int* argc, char** argv, char* windowName)
 	glutInit(argc, argv);
 	glutInitContextFlags(GLUT_DEBUG);
 
-	//ctx = igCreateContext(NULL);
-	//io = igGetIO();
-
-	//ImGui_ImplGLUT_Init();
 
 	// set RGBA mode, double buffer window, and have a depth buffer
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 
 	// set the window starting position and size
-	glutInitWindowPosition(200, 200);
+	glutInitWindowPosition(100, 0);
 	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 
 	// set window name
 	glutCreateWindow(windowName);
+
+	// Initialise the GUI
+	GuiInit();
 
 	// callback functions
 
@@ -210,13 +210,19 @@ void initialiseWindow(int* argc, char** argv, char* windowName)
 
 	// enter loop
 	glutMainLoop();
+
+	// on program close
+	GuiFree();
 }
+
 
 void windowRender(void)
 {
 
 	// calculate delta time (time since last frame)
 	calculateDeltaTime();
+
+	GuiUpdate(&gameObjectManager);
 
 	// clear the color and depth buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -233,6 +239,8 @@ void windowRender(void)
 
 	// ======================================= \\
 
+	GuiRender();
+
 	// swap the buffers
 	glutSwapBuffers();
 }
@@ -247,6 +255,7 @@ void calculateDeltaTime()
 
 void reshapeWindow(int width, int height)
 {
+	ImGui_ImplGLUT_ReshapeFunc();
 	// if height is 0 then set it 1
 	if (height == 0) height = 1;
 

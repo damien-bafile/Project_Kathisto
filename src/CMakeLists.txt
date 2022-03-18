@@ -1,6 +1,7 @@
 add_subdirectory(math)
 add_subdirectory(game)
 add_subdirectory(window)
+add_subdirectory(gui)
 
 
 set(SOURCES
@@ -8,4 +9,5 @@ set(SOURCES
     ${MATH}
     ${GAME}
     ${WINDOW}
+    ${GUI}
     PARENT_SCOPE)
