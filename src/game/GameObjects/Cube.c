@@ -61,8 +61,6 @@ Mesh cubeMesh = {
 
 OnStart OnCubeStart(GameObject* gameObject)
 {
-	InitGameObject(gameObject, &OnCubeUpdate, NULL);
-
 	gameObject->name = "cube";
 
 	gameObject->mesh = cubeMesh;
