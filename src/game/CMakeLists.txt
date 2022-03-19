@@ -7,5 +7,7 @@ set(GAME
    src/game/GameObjects/Camera.c
    src/game/GameObjects/Cube.h
    src/game/GameObjects/Cube.c
+   src/game/GameObjects/Floor.h
+   src/game/GameObjects/Floor.c
 
     PARENT_SCOPE)

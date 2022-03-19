@@ -1,6 +1,6 @@
 #include "Game.h"
 
-void initGameObjectManager(GameObjectManager* gameObjectManager)
+void InitGameObjectManager(GameObjectManager* gameObjectManager)
 {
 	const size_t count = 20u;
 	gameObjectManager->count = count;
@@ -11,7 +11,7 @@ void initGameObjectManager(GameObjectManager* gameObjectManager)
 	if (gameObjectManager->gameObjects == NULL) return;
 	for (size_t i = 0; i < count; i++)
 	{
-		initGameObject(&gameObjectManager->gameObjects[i]);
+		InitGameObject(&gameObjectManager->gameObjects[i]);
 	}
 }
 
@@ -25,7 +25,7 @@ void gameObjectManagerIncrease(GameObjectManager* gameObjectManager)
 
 		for (size_t i = gameObjectManager->count; i < newCount; i++)
 		{
-			initGameObject(&gameObjectManager->gameObjects[i]);
+			InitGameObject(&gameObjectManager->gameObjects[i]);
 		}
 
 		gameObjectManager->count += newCount;
@@ -95,7 +95,8 @@ void updateGameObjects(Time time, GameObjectManager* gameObjectManager)
 	}
 }
 
-void initGameObject(GameObject* gameObject)
+void InitGameObject(GameObject* gameObject, void (*onUpdate)(Time, GameObject*),
+void (*onFixedUpdate)(Time, GameObject*))
 {
 	gameObject->id = 0;
 	gameObject->name = NULL;
@@ -103,9 +104,9 @@ void initGameObject(GameObject* gameObject)
 	initMesh(&gameObject->mesh);
 	initRigidBody(&gameObject->rigidBody);
 	gameObject->debug = false;
-	//gameObject->onStart = NULL;
-	gameObject->onUpdate = NULL;
-	gameObject->onFixedUpdate = NULL;
+
+	gameObject->onUpdate = onUpdate;
+	gameObject->onFixedUpdate = onFixedUpdate;
 }
 
 void updateGameObject(Time time, GameObject* gameObject)

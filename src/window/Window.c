@@ -1,6 +1,7 @@
 #include "Window.h"
 
 #include "game/GameObjects/Cube.h"
+#include "game/GameObjects/Floor.h"
 
 int WINDOW_WIDTH = 1280;
 int WINDOW_HEIGHT = 750;
@@ -69,49 +70,17 @@ void initialiseWindow(int* argc, char** argv, char* windowName)
 	// SETUP GAME OBJECT MANAGER \\
 	// 
 	// setup game object manager
-	initGameObjectManager(&gameObjectManager);
+	InitGameObjectManager(&gameObjectManager);
 
-	initGameObject(&cube);
 	gameObjectManagerAdd(&gameObjectManager, cube);
-
-
-	gameObjectManager.gameObjects[0].onStart(&gameObjectManager.gameObjects[0]);
-
-	GameObject floor;
-	initGameObject(&floor);
-
-	// position of each of the ground points
-	const Vector3 floorVertexBuffer[] = {
-		{ -1.0f, 0.0f, -1.0f },
-		{ -1.0f, 0.0f, 1.0f },
-		{ 1.0f,  0.0f, 1.0f },
-		{ 1.0f,  0.0f, -1.0f },
-
-	};
-
-	// index buffer on how to  the points
-	const Vector3Int floorIndexBuffer[] = {
-		{0, 1, 2},
-		{2, 3, 0}
-	};
-
-	// simple RGBA color buffer
-	const RGBA floorColorBuffer[] = { {0.7f, 0.7f, 0.7f, 1.0f} };
-
-	// create the mesh
-	Mesh floorMesh = {
-		.points = floorVertexBuffer,
-		.indices = floorIndexBuffer,
-		.pointSize = 4,
-		.indexCount = 6,
-		.colors = floorColorBuffer,
-		.isUniformColor = true };
-
-	floor.mesh = floorMesh;
-	floor.transform.scale = (Vector3){ 100.0f, 1.0f, 100.0f };
-
-	calculateMeshBoundBox(&floor.mesh);
 	gameObjectManagerAdd(&gameObjectManager, floor);
+
+
+	for (size_t i = 0; i < gameObjectManager.lastIndex; i++)
+	{
+		if (gameObjectManager.gameObjects[i].onStart != NULL)
+			gameObjectManager.gameObjects[i].onStart(&gameObjectManager.gameObjects[i]);
+	}
 
 	// enter loop
 	glutMainLoop();
