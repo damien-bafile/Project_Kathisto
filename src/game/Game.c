@@ -103,7 +103,7 @@ void initGameObject(GameObject* gameObject)
 	initMesh(&gameObject->mesh);
 	initRigidBody(&gameObject->rigidBody);
 	gameObject->debug = false;
-	gameObject->onStart = NULL;
+	//gameObject->onStart = NULL;
 	gameObject->onUpdate = NULL;
 	gameObject->onFixedUpdate = NULL;
 }
