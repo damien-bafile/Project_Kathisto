@@ -87,11 +87,11 @@ GameObject* gameObjectManagerFind(GameObjectManager* gameObjectManager, size_t i
 	return &gameObjectManager->gameObjects[id];
 }
 
-void updateGameObjects(float deltaTime, GameObjectManager* gameObjectManager)
+void updateGameObjects(Time time, GameObjectManager* gameObjectManager)
 {
 	for (size_t i = 0; i < gameObjectManager->lastIndex; i++)
 	{
-		updateGameObject(deltaTime, &gameObjectManager->gameObjects[i]);
+		updateGameObject(time, &gameObjectManager->gameObjects[i]);
 	}
 }
 
@@ -108,25 +108,25 @@ void initGameObject(GameObject* gameObject)
 	gameObject->onFixedUpdate = NULL;
 }
 
-void updateGameObject(float deltaTime, GameObject* gameObject)
+void updateGameObject(Time time, GameObject* gameObject)
 {
 	glPushMatrix();
 
-	if(gameObject->onUpdate != NULL) gameObject->onUpdate(deltaTime, gameObject);
+	if(gameObject->onUpdate != NULL) gameObject->onUpdate(time, gameObject);
 
 	Mesh* mesh = &gameObject->mesh;
 	
-	updateTransform(deltaTime, &gameObject->transform);
+	updateTransform(time, &gameObject->transform);
 
-	updateMesh(deltaTime, mesh);
+	updateMesh(time, mesh);
 
 	if(gameObject->debug)
-		drawGizmos(deltaTime, mesh->maxPosition);
+		drawGizmos(time, mesh->maxPosition);
 	
 	glPopMatrix();
 }
 
-void updateTransform(float deltaTime, Transform* transform)
+void updateTransform(Time time, Transform* transform)
 {
 	Vector3* pos = &transform->position;
 	Vector3* rot = &transform->rotation;
@@ -141,7 +141,7 @@ void updateTransform(float deltaTime, Transform* transform)
 	glScalef(scale->x, scale->y, scale->z);
 }
 
-void updateMesh(float deltaTime, Mesh* mesh)
+void updateMesh(Time time, Mesh* mesh)
 {
 	if (!mesh->isUniformColor) glEnableClientState(GL_COLOR_ARRAY);
 
@@ -160,7 +160,7 @@ void updateMesh(float deltaTime, Mesh* mesh)
 	if (!mesh->isUniformColor) glDisableClientState(GL_COLOR_ARRAY);
 }
 
-void drawGizmos(float deltaTime, Vector3 maxSize)
+void drawGizmos(Time time, Vector3 maxSize)
 {
 	Vector3 gizmoSize = Vec3ScalarAdd(maxSize, 1.5f);
 
@@ -186,7 +186,7 @@ void drawGizmos(float deltaTime, Vector3 maxSize)
 	glEnd();
 }
 
-void fixedUpdateGameObject(float deltaTime, GameObject* gameObject)
+void fixedUpdateGameObject(Time time, GameObject* gameObject)
 {
 
 }

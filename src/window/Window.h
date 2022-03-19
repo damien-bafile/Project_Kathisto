@@ -20,9 +20,7 @@ extern int frame;
 extern int timebase;
 extern int fps;
 
-extern int currTime;
-extern float prevTime;
-extern float deltaTime;
+extern Time time;
 
 extern GameObjectManager gameObjectManager;
 

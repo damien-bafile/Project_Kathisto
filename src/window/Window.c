@@ -10,22 +10,25 @@ int frame = 0;
 int timebase = 0;
 int fps = 0;
 
-int currTime = 0;
-float prevTime = 0.0f;
-float deltaTime = 0.0f;
+Time time =
+{
+	.currTime = 0,
+	.prevTime = 0.0f,
+	.deltaTime = 0.0f,
+};
 
 
 GameObjectManager gameObjectManager;
 
 
-void onCubeUpdate(float deltaTime, GameObject* gameObject)
+void onCubeUpdate(Time time, GameObject* gameObject)
 {
 	Vector3* pos = &gameObject->transform.position;
 
 	float amplitude = 2.0f;
 	float period = 2.0f;
 
-	float theta = (currTime / 1000.0f) * period;
+	float theta = (time.currTime) * period;
 	float distance = sin(theta) / amplitude;
 
 	float hover = lerp(6.0f, 12.0f, distance);
@@ -34,9 +37,9 @@ void onCubeUpdate(float deltaTime, GameObject* gameObject)
 
 
 	Vector3* rot = &gameObject->transform.rotation;
-	rot->x += (deltaTime * 20);
-	rot->y += (deltaTime * 20);
-	rot->z += (deltaTime * 20);
+	rot->x += (time.deltaTime * 20);
+	rot->y += (time.deltaTime * 20);
+	rot->z += (time.deltaTime * 20);
 
 }
 
@@ -95,7 +98,7 @@ void initialiseWindow(int* argc, char** argv, char* windowName)
 
 	GameObject cube;
 	initGameObject(&cube);
-	
+
 	const Vector3 cubeVertexBuffer[] = {
 		{ -1.0f, -1.0f, -1.0f },
 		{ 1.0f, -1.0f, -1.0f },
@@ -171,12 +174,6 @@ void initialiseWindow(int* argc, char** argv, char* windowName)
 
 	// position of each of the ground points
 	const Vector3 floorVertexBuffer[] = {
-		//{-100.0f, 0.0f, -100.0f},
-		//{-100.0f, 0.0f, 100.0f},
-		//{100.0f, 0.0f, 100.0f},
-		//{100.0f, 0.0f, -100.0f},
-
-
 		{ -1.0f, 0.0f, -1.0f },
 		{ -1.0f, 0.0f, 1.0f },
 		{ 1.0f,  0.0f, 1.0f },
@@ -231,11 +228,11 @@ void windowRender(void)
 	glLoadIdentity();
 
 	// CAMERA RENDER
-	cameraRender(deltaTime);
+	cameraRender(time.deltaTime);
 
 	// ======= GAME OBJECTS RENDER  ======= \\
 	
-	updateGameObjects(deltaTime, &gameObjectManager);
+	updateGameObjects(time, &gameObjectManager);
 
 	// ======================================= \\
 
@@ -248,9 +245,9 @@ void windowRender(void)
 void calculateDeltaTime()
 {
 	// get the current delta time (time since last frame)
-	currTime = glutGet(GLUT_ELAPSED_TIME);
-	deltaTime = (currTime - prevTime) / 1000.0f;
-	prevTime = (float)currTime;
+	time.currTime = glutGet(GLUT_ELAPSED_TIME) / 1000.0f;
+	time.deltaTime = (time.currTime - time.prevTime);
+	time.prevTime = time.currTime;
 }
 
 void reshapeWindow(int width, int height)

@@ -8,6 +8,14 @@
 
 #include "math/Vector.h"
 
+typedef struct Time
+{
+	float currTime;
+	float prevTime;
+	float deltaTime;
+} Time;
+
+
 typedef struct Transform
 {
 	Vector3 position;
@@ -51,8 +59,8 @@ struct GameObject
 	bool debug;
 
 	void (*onStart)(GameObject*);
-	void (*onUpdate)(float, GameObject*);
-	void (*onFixedUpdate)(float, GameObject*);
+	void (*onUpdate)(Time, GameObject*);
+	void (*onFixedUpdate)(Time, GameObject*);
 };
 
 typedef struct GameObjectManager
@@ -73,10 +81,10 @@ void gameObjectManagerIncrease(GameObjectManager *gameObjectManager);
 void gameObjectManagerAdd(GameObjectManager *gameObjectManager, GameObject GameObject);
 void gameObjectManagerRemove(GameObjectManager *gameObjectManager, size_t id);
 GameObject* gameObjectManagerFind(GameObjectManager *gameObjectManager, size_t id);
-void updateGameObjects(float deltaTime, GameObjectManager* gameObjectManager);
+void updateGameObjects(Time time, GameObjectManager* gameObjectManager);
 
 void initGameObject(GameObject *gameObject); // initialise the game object
-void fixedUpdateGameObject(float deltaTime, GameObject *gameObject); // called on physics update
+void fixedUpdateGameObject(Time time, GameObject *gameObject); // called on physics update
 void freeGameObject(GameObject *gameObject); // free the game object
 
 void initTransform(Transform *transform);
@@ -84,10 +92,10 @@ void initMesh(Mesh *mesh);
 void initRigidBody(RigidBody *RigidBody);
 
 
-void updateGameObject(float deltaTime, GameObject* gameObject); // called every frame update
-void updateTransform(float deltaTime, Transform* transform);
-void updateMesh(float deltaTime, Mesh* mesh);
-void drawGizmos(float deltaTime, Vector3 maxSize);
+void updateGameObject(Time time, GameObject* gameObject); // called every frame update
+void updateTransform(Time time, Transform* transform);
+void updateMesh(Time time, Mesh* mesh);
+void drawGizmos(Time time, Vector3 maxSize);
 
 void calculateMeshBoundBox(Mesh* mesh);
 void freeMesh(Mesh *mesh);
