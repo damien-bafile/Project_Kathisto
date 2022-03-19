@@ -20,7 +20,7 @@ Time time = {
 GameObjectManager gameObjectManager;
 
 
-void initialiseWindow(int* argc, char** argv, char* windowName)
+void InitialiseWindow(int* argc, char** argv, char* windowName)
 {
 	// initialise GLUT, with debug logs
 	glutInit(argc, argv);
@@ -43,23 +43,23 @@ void initialiseWindow(int* argc, char** argv, char* windowName)
 	// callback functions
 
 	// on reshape
-	glutReshapeFunc(reshapeWindow);
+	glutReshapeFunc(ReshapeWindow);
 
 	// rendering callbacks
-	glutDisplayFunc(windowRender);
-	glutIdleFunc(windowRender);
+	glutDisplayFunc(WindowRender);
+	glutIdleFunc(WindowRender);
 
 	// keyboard and mouse input
-	glutKeyboardFunc(onKeyDown); // on key down
-	glutKeyboardUpFunc(onKeyUp); // on key up
+	glutKeyboardFunc(OnKeyDown); // on key down
+	glutKeyboardUpFunc(OnKeyUp); // on key up
 
-	glutSpecialFunc(onSpecialKeyDown); // on special key down (function keys, ctrl etc)
-	glutSpecialUpFunc(onSpecialKeyUp); // on special key up
+	glutSpecialFunc(OnSpecialKeyDown); // on special key down (function keys, ctrl etc)
+	glutSpecialUpFunc(OnSpecialKeyUp); // on special key up
 
 	glutIgnoreKeyRepeat(1); // ignore auto repeat keystrokes so it doesnt constantly fire key up and key down
 
-	glutMouseFunc(onMouseButton); // on mouse click
-	glutPassiveMotionFunc(onMouseMove); // ALWAYS MOVING
+	glutMouseFunc(OnMouseButton); // on mouse click
+	glutPassiveMotionFunc(OnMouseMove); // ALWAYS MOVING
 
 	// hide the cursor
 	glutSetCursor(GLUT_CURSOR_NONE);
@@ -72,21 +72,17 @@ void initialiseWindow(int* argc, char** argv, char* windowName)
 	// setup game object manager
 	InitGameObjectManager(&gameObjectManager);
 
+	// first you must initialise your gameobjects
 	InitGameObject(&cube);
 	InitGameObject(&floorGameObject);
 
-	SetupCallbacks(&cube, OnCubeStart, OnCubeUpdate, NULL);
-	SetupCallbacks(&floorGameObject, OnFloorStart, OnFloorUpdate, NULL);
+	// setup their callbacks, start should never be NULL, however the others can be
+	SetupCallbacks(&cube, OnCubeStart, OnCubeUpdate, OnCubeFixedUpdate);
+	SetupCallbacks(&floorGameObject, OnFloorStart, NULL, NULL);
 
-	gameObjectManagerAdd(&gameObjectManager, cube);
-	gameObjectManagerAdd(&gameObjectManager, floorGameObject);
-
-
-	for (size_t i = 0; i < gameObjectManager.lastIndex; i++)
-	{
-		if (gameObjectManager.gameObjects[i].OnStart != NULL)
-			gameObjectManager.gameObjects[i].OnStart(&gameObjectManager.gameObjects[i]);
-	}
+	// add them to the game object manager where start will be called
+	GameObjectManagerAdd(&gameObjectManager, cube);
+	GameObjectManagerAdd(&gameObjectManager, floorGameObject);
 
 	// enter loop
 	glutMainLoop();
@@ -95,12 +91,11 @@ void initialiseWindow(int* argc, char** argv, char* windowName)
 	GuiFree();
 }
 
-
-void windowRender(void)
+void WindowRender(void)
 {
 
 	// calculate delta time (time since last frame)
-	calculateDeltaTime();
+	CalculateDeltaTime();
 
 	GuiUpdate(&gameObjectManager);
 
@@ -111,11 +106,11 @@ void windowRender(void)
 	glLoadIdentity();
 
 	// CAMERA RENDER
-	cameraRender(time.deltaTime);
+	CameraRender(time.deltaTime);
 
 	// ======= GAME OBJECTS RENDER  ======= \\
 	
-	updateGameObjects(time, &gameObjectManager);
+	UpdateGameObjects(time, &gameObjectManager);
 
 	// ======================================= \\
 
@@ -125,7 +120,7 @@ void windowRender(void)
 	glutSwapBuffers();
 }
 
-void calculateDeltaTime()
+void CalculateDeltaTime()
 {
 	// get the current delta time (time since last frame)
 	time.currTime = glutGet(GLUT_ELAPSED_TIME) / 1000.0f;
@@ -133,7 +128,7 @@ void calculateDeltaTime()
 	time.prevTime = time.currTime;
 }
 
-void reshapeWindow(int width, int height)
+void ReshapeWindow(int width, int height)
 {
 	ImGui_ImplGLUT_ReshapeFunc();
 	// if height is 0 then set it 1

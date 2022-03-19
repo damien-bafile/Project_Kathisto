@@ -18,5 +18,5 @@ extern Vector2 mousePos;
 extern Vector2 mouseDeltaPos;
 
 
-void computeCameraPos(float deltaTime); // compute the position of the camera
-void cameraRender(float deltaTime); // called every time the camera should render
+void ComputeCameraPos(float deltaTime); // compute the position of the camera
+void CameraRender(float deltaTime); // called every time the camera should render

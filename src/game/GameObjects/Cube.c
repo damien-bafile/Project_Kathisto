@@ -64,7 +64,7 @@ OnStart OnCubeStart(GameObject* gameObject)
 	gameObject->name = "cube";
 
 	gameObject->mesh = cubeMesh;
-	calculateMeshBoundBox(&gameObject->mesh);
+	CalculateMeshBoundBox(&gameObject->mesh);
 
 	gameObject->transform.position = (Vector3){ 5.0f, 4.0f, 0.0f };
 	gameObject->transform.scale = (Vector3){ 1.0f, 1.0f, 1.0f };
@@ -92,3 +92,6 @@ OnUpdate OnCubeUpdate(Time time, GameObject* gameObject)
 
 }
 
+OnFixedUpdate OnCubeFixedUpdate(Time time, GameObject* gameObject)
+{
+}

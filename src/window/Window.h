@@ -25,13 +25,13 @@ extern Time time;
 extern GameObjectManager gameObjectManager;
 
 // calculate the delta time
-void calculateDeltaTime(); 
+void CalculateDeltaTime(); 
 
 // called when window gets resized
-void reshapeWindow(int width, int height); 
+void ReshapeWindow(int width, int height); 
 
 // called every frame
-void windowRender(void); 
+void WindowRender(void); 
 
 // initialise the window with a name
-void initialiseWindow(int* argc, char** argv, char* windowName);
+void InitialiseWindow(int* argc, char** argv, char* windowName);

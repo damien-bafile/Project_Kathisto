@@ -2,7 +2,7 @@
 #define CIMGUI_DEFINE_ENUMS_AND_STRUCTS
 #include "cimgui.h"
 
-void onKeyDown(unsigned char key, int x, int y)
+void OnKeyDown(unsigned char key, int x, int y)
 {
 	ImGui_ImplGLUT_KeyboardFunc();
 	switch (key) {
@@ -30,7 +30,7 @@ void onKeyDown(unsigned char key, int x, int y)
 	}
 }
 
-void onKeyUp(unsigned char key, int x, int y)
+void OnKeyUp(unsigned char key, int x, int y)
 {
 	ImGui_ImplGLUT_KeyboardUpFunc();
 	switch (key) {
@@ -56,23 +56,23 @@ void onKeyUp(unsigned char key, int x, int y)
 }
 
 
-void onSpecialKeyDown(int key, int x, int y)
+void OnSpecialKeyDown(int key, int x, int y)
 {
 	ImGui_ImplGLUT_SpecialFunc();
 }
 
-void onSpecialKeyUp(int key, int x, int y)
+void OnSpecialKeyUp(int key, int x, int y)
 {
 	ImGui_ImplGLUT_SpecialUpFunc();
 }
 
 
-void onMouseButton(int button, int state, int x, int y)
+void OnMouseButton(int button, int state, int x, int y)
 {
 	ImGui_ImplGLUT_MouseFunc();
 }
 
-void onMouseMove(int x, int y)
+void OnMouseMove(int x, int y)
 {
 	ImGui_ImplGLUT_MotionFunc();
 

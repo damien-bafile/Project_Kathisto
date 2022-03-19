@@ -11,5 +11,3 @@
 extern GameObject floorGameObject;
 
 OnStart OnFloorStart(GameObject *gameObject);
-OnUpdate OnFloorUpdate(Time time, GameObject* gameObject);
-OnFixedUpdate OnFloorFixedUpdate(Time time, GameObject* gameObject);

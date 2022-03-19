@@ -13,3 +13,4 @@ extern GameObject cube;
 OnStart OnCubeStart(GameObject* gameObject);
 
 OnUpdate OnCubeUpdate(Time time, GameObject* gameObject);
+OnFixedUpdate OnCubeFixedUpdate(Time time, GameObject* gameObject);

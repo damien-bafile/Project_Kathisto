@@ -15,7 +15,6 @@ typedef struct Time
 	float deltaTime;
 } Time;
 
-
 typedef struct Transform
 {
 	Vector3 position;
@@ -80,28 +79,28 @@ typedef struct GameObjectManager
 // not needed for this unit tbh
 
 void InitGameObjectManager(GameObjectManager* gameObjectManager);
-void gameObjectManagerIncrease(GameObjectManager* gameObjectManager);
-void gameObjectManagerAdd(GameObjectManager* gameObjectManager, GameObject GameObject);
-void gameObjectManagerRemove(GameObjectManager* gameObjectManager, size_t id);
-GameObject* gameObjectManagerFind(GameObjectManager* gameObjectManager, size_t id);
-void updateGameObjects(Time time, GameObjectManager* gameObjectManager);
+void GameObjectManagerIncrease(GameObjectManager* gameObjectManager);
+void GameObjectManagerAdd(GameObjectManager* gameObjectManager, GameObject GameObject);
+void GameObjectManagerRemove(GameObjectManager* gameObjectManager, size_t id);
+GameObject* GameObjectManagerFind(GameObjectManager* gameObjectManager, size_t id);
+void UpdateGameObjects(Time time, GameObjectManager* gameObjectManager);
 
 void InitGameObject(GameObject* gameObject); // initialise the game object
 void SetupCallbacks(GameObject* gameObject, OnStart OnStart, OnUpdate OnUpdate, OnFixedUpdate OnFixedUpdate); // setup the callbacks
-void fixedUpdateGameObject(Time time, GameObject* gameObject); // called on physics update
-void freeGameObject(GameObject* gameObject); // free the game object
+void FixedUpdateGameObject(Time time, GameObject* gameObject); // called on physics update
+void FreeGameObject(GameObject* gameObject); // free the game object
 
-void initTransform(Transform* transform);
-void initMesh(Mesh* mesh);
-void initRigidBody(RigidBody* RigidBody);
+void InitTransform(Transform* transform);
+void InitMesh(Mesh* mesh);
+void InitRigidBody(RigidBody* RigidBody);
 
 
-void updateGameObject(Time time, GameObject* gameObject); // called every frame update
-void updateTransform(Time time, Transform* transform);
-void updateMesh(Time time, Mesh* mesh);
-void drawGizmos(Time time, Vector3 maxSize);
+void UpdateGameObject(Time time, GameObject* gameObject); // called every frame update
+void UpdateTransform(Time time, Transform* transform);
+void UpdateMesh(Time time, Mesh* mesh);
+void DrawGizmos(Time time, Vector3 maxSize);
 
-void calculateMeshBoundBox(Mesh* mesh);
-void freeMesh(Mesh* mesh);
+void CalculateMeshBoundBox(Mesh* mesh);
+void FreeMesh(Mesh* mesh);
 
-void simulateRigidBody(RigidBody* RigidBody); // simulate rigid body
+void SimulateRigidBody(RigidBody* RigidBody); // simulate rigid body

@@ -9,7 +9,7 @@ Vector2 mousePos = { 0.0f, 0.0f };
 Vector2 mouseDeltaPos = { 0.0f, 0.0f };
 
 
-void computeCameraPos(float deltaTime)
+void ComputeCameraPos(float deltaTime)
 {
 	// REMEMBER: multiplying by delta time helps create smooth movement
 
@@ -35,10 +35,10 @@ void computeCameraPos(float deltaTime)
 
 }
 
-void cameraRender(float deltaTime)
+void CameraRender(float deltaTime)
 {
 	// compute the cameras position you can move
-	computeCameraPos(deltaTime);
+	ComputeCameraPos(deltaTime);
 
 	// Cam Position and rotation
 	gluLookAt(cameraPos.x, cameraPos.y, cameraPos.z,

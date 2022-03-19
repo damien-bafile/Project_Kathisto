@@ -15,7 +15,7 @@ void InitGameObjectManager(GameObjectManager* gameObjectManager)
 	}
 }
 
-void gameObjectManagerIncrease(GameObjectManager* gameObjectManager)
+void GameObjectManagerIncrease(GameObjectManager* gameObjectManager)
 {
 	const size_t newCount = gameObjectManager->count + (gameObjectManager->count / 2);
 	GameObject* temp = realloc(gameObjectManager->gameObjects, newCount * sizeof(GameObject));
@@ -41,16 +41,21 @@ void gameObjectManagerIncrease(GameObjectManager* gameObjectManager)
  * @param gameObjectManager
  * @param gameObject
  */
-void gameObjectManagerAdd(GameObjectManager* gameObjectManager, GameObject gameObject)
+void GameObjectManagerAdd(GameObjectManager* gameObjectManager, GameObject gameObject)
 {
 	if (gameObjectManager->freeSpace == 0)
-		gameObjectManagerIncrease(gameObjectManager);
+		GameObjectManagerIncrease(gameObjectManager);
 
+	// set its id to the last index
 	gameObject.id = gameObjectManager->lastIndex;
 
-	gameObjectManager->gameObjects[gameObjectManager->lastIndex] = gameObject; // test this
-	if (gameObjectManager->gameObjects[gameObjectManager->lastIndex].OnStart != NULL)
-		gameObjectManager->gameObjects[gameObjectManager->lastIndex].OnStart(&gameObjectManager->gameObjects[gameObjectManager->lastIndex]);
+	// set the last index to the game object to be added
+	gameObjectManager->gameObjects[gameObjectManager->lastIndex] = gameObject; 
+
+	// then call the on start method
+	// NOTE THE ONSTART SHOULD NEVER BE NULL, IF ITS NULL THEN YOU HAVE DONE SOMETHING WRONG, THATS WHY THE IF STATEMENT IS COMMENTED OUT
+	//if (gameObjectManager->gameObjects[gameObjectManager->lastIndex].OnStart != NULL)
+	gameObjectManager->gameObjects[gameObjectManager->lastIndex].OnStart(&gameObjectManager->gameObjects[gameObjectManager->lastIndex]);
 
 	gameObjectManager->freeSpace--;
 	gameObjectManager->lastIndex++;
@@ -68,15 +73,15 @@ void gameObjectManagerAdd(GameObjectManager* gameObjectManager, GameObject gameO
  * @param gameObjectManager
  * @param id
  */
-void gameObjectManagerRemove(GameObjectManager* gameObjectManager, size_t id)
+void GameObjectManagerRemove(GameObjectManager* gameObjectManager, size_t id)
 {
-	freeGameObject(&gameObjectManager->gameObjects[id]);
+	FreeGameObject(&gameObjectManager->gameObjects[id]);
 	for (size_t i = id + 1; i < gameObjectManager->count; i++)
 	{
 		gameObjectManager->gameObjects[i - 1] = gameObjectManager->gameObjects[i];
 		gameObjectManager->gameObjects[i - 1].id = i - 1;
 		if (i == gameObjectManager->count - 1)
-			freeGameObject(&gameObjectManager->gameObjects[i]);
+			FreeGameObject(&gameObjectManager->gameObjects[i]);
 	}
 
 	gameObjectManager->count--;
@@ -84,16 +89,16 @@ void gameObjectManagerRemove(GameObjectManager* gameObjectManager, size_t id)
 	gameObjectManager->lastIndex--;
 }
 
-GameObject* gameObjectManagerFind(GameObjectManager* gameObjectManager, size_t id)
+GameObject* GameObjectManagerFind(GameObjectManager* gameObjectManager, size_t id)
 {
 	return &gameObjectManager->gameObjects[id];
 }
 
-void updateGameObjects(Time time, GameObjectManager* gameObjectManager)
+void UpdateGameObjects(Time time, GameObjectManager* gameObjectManager)
 {
 	for (size_t i = 0; i < gameObjectManager->lastIndex; i++)
 	{
-		updateGameObject(time, &gameObjectManager->gameObjects[i]);
+		UpdateGameObject(time, &gameObjectManager->gameObjects[i]);
 	}
 }
 
@@ -101,9 +106,9 @@ void InitGameObject(GameObject* gameObject)
 {
 	gameObject->id = 0;
 	gameObject->name = NULL;
-	initTransform(&gameObject->transform);
-	initMesh(&gameObject->mesh);
-	initRigidBody(&gameObject->rigidBody);
+	InitTransform(&gameObject->transform);
+	InitMesh(&gameObject->mesh);
+	InitRigidBody(&gameObject->rigidBody);
 	gameObject->debug = false;
 	gameObject->OnStart = NULL;
 	gameObject->OnUpdate = NULL;
@@ -117,7 +122,7 @@ void SetupCallbacks(GameObject* gameObject, OnStart OnStart, OnUpdate OnUpdate, 
 	gameObject->OnFixedUpdate = OnFixedUpdate;
 }
 
-void updateGameObject(Time time, GameObject* gameObject)
+void UpdateGameObject(Time time, GameObject* gameObject)
 {
 	glPushMatrix();
 
@@ -125,17 +130,17 @@ void updateGameObject(Time time, GameObject* gameObject)
 
 	Mesh* mesh = &gameObject->mesh;
 
-	updateTransform(time, &gameObject->transform);
+	UpdateTransform(time, &gameObject->transform);
 
-	updateMesh(time, mesh);
+	UpdateMesh(time, mesh);
 
 	if (gameObject->debug)
-		drawGizmos(time, mesh->maxPosition);
+		DrawGizmos(time, mesh->maxPosition);
 
 	glPopMatrix();
 }
 
-void updateTransform(Time time, Transform* transform)
+void UpdateTransform(Time time, Transform* transform)
 {
 	Vector3* pos = &transform->position;
 	Vector3* rot = &transform->rotation;
@@ -150,7 +155,7 @@ void updateTransform(Time time, Transform* transform)
 	glScalef(scale->x, scale->y, scale->z);
 }
 
-void updateMesh(Time time, Mesh* mesh)
+void UpdateMesh(Time time, Mesh* mesh)
 {
 	if (!mesh->isUniformColor) glEnableClientState(GL_COLOR_ARRAY);
 
@@ -169,7 +174,7 @@ void updateMesh(Time time, Mesh* mesh)
 	if (!mesh->isUniformColor) glDisableClientState(GL_COLOR_ARRAY);
 }
 
-void drawGizmos(Time time, Vector3 maxSize)
+void DrawGizmos(Time time, Vector3 maxSize)
 {
 	Vector3 gizmoSize = Vec3ScalarAdd(maxSize, 1.5f);
 
@@ -195,30 +200,30 @@ void drawGizmos(Time time, Vector3 maxSize)
 	glEnd();
 }
 
-void fixedUpdateGameObject(Time time, GameObject* gameObject)
+void FixedUpdateGameObject(Time time, GameObject* gameObject)
 {
 
 }
 
-void freeGameObject(GameObject* gameObject)
+void FreeGameObject(GameObject* gameObject)
 {
 	free(gameObject->name);
 	gameObject->name = NULL;
 
-	freeMesh(&gameObject->mesh);
+	FreeMesh(&gameObject->mesh);
 	free(gameObject);
 	gameObject = NULL;
 
 }
 
-void initTransform(Transform* transform)
+void InitTransform(Transform* transform)
 {
 	transform->position = EmptyVec3();
 	transform->rotation = EmptyVec3();
 	transform->scale = (Vector3){ 1.0f, 1.0f, 1.0f };
 }
 
-void initMesh(Mesh* mesh)
+void InitMesh(Mesh* mesh)
 {
 	mesh->points = NULL;
 	mesh->indices = NULL;
@@ -229,7 +234,7 @@ void initMesh(Mesh* mesh)
 	mesh->maxPosition = EmptyVec3();
 }
 
-void calculateMeshBoundBox(Mesh* mesh)
+void CalculateMeshBoundBox(Mesh* mesh)
 {
 	if (mesh->points == NULL || mesh->pointSize == 0) return;
 
@@ -251,7 +256,7 @@ void calculateMeshBoundBox(Mesh* mesh)
 	mesh->maxPosition = max;
 }
 
-void initRigidBody(RigidBody* rigidBody)
+void InitRigidBody(RigidBody* rigidBody)
 {
 	rigidBody->isStatic = false;
 	rigidBody->useGravity = false;
@@ -259,7 +264,7 @@ void initRigidBody(RigidBody* rigidBody)
 	rigidBody->velocity = 0.0f;
 }
 
-void freeMesh(Mesh* mesh)
+void FreeMesh(Mesh* mesh)
 {
 	free(mesh->points);
 	free(mesh->indices);
@@ -269,7 +274,7 @@ void freeMesh(Mesh* mesh)
 	mesh = NULL;
 }
 
-void simulateRigidBody(RigidBody* RigidBody)
+void SimulateRigidBody(RigidBody* RigidBody)
 {
 
 }

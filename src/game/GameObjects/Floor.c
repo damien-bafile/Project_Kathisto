@@ -33,12 +33,5 @@ OnStart OnFloorStart(GameObject* gameObject)
 {
 	gameObject->mesh = floorMesh;
 	gameObject->transform.scale = (Vector3){ 100.0f, 1.0f, 100.0f };
-	calculateMeshBoundBox(&gameObject->mesh);
+	CalculateMeshBoundBox(&gameObject->mesh);
 }
-
-OnUpdate OnFloorUpdate(Time time, GameObject* gameObject)
-{
-}
-
-OnFixedUpdate OnFloorFixedUpdate(Time time, GameObject* gameObject)
-{}
