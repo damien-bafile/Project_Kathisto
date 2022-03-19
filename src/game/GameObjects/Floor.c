@@ -31,6 +31,7 @@ const Mesh floorMesh = {
 
 OnStart OnFloorStart(GameObject* gameObject)
 {
+	gameObject->name = "Floor";
 	gameObject->mesh = floorMesh;
 	gameObject->transform.scale = (Vector3){ 100.0f, 1.0f, 100.0f };
 	CalculateMeshBoundBox(&gameObject->mesh);

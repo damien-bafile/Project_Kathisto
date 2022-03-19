@@ -32,7 +32,7 @@ void DebugMenu(GameObjectManager* gameObjectManager)
 		if (gameObjectManager->gameObjects[i].name != NULL)
 		{
 			igText(gameObjectManager->gameObjects[i].name);
-			igDragFloat("Position Y", &gameObjectManager->gameObjects[i].transform.position.y, 0.005f, -100.0f, 100.0f, "%.02f", 0);
+			igDragFloat("Position Y", &gameObjectManager->gameObjects[i].transform.position.y, 0.1f, -100.0f, 100.0f, "%.02f", 0);
 		}			
 	}
 	igEnd();
