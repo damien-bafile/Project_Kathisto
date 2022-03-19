@@ -49,6 +49,8 @@ void gameObjectManagerAdd(GameObjectManager* gameObjectManager, GameObject gameO
 	gameObject.id = gameObjectManager->lastIndex;
 
 	gameObjectManager->gameObjects[gameObjectManager->lastIndex] = gameObject; // test this
+	if (gameObjectManager->gameObjects[gameObjectManager->lastIndex].OnStart != NULL)
+		gameObjectManager->gameObjects[gameObjectManager->lastIndex].OnStart(&gameObjectManager->gameObjects[gameObjectManager->lastIndex]);
 
 	gameObjectManager->freeSpace--;
 	gameObjectManager->lastIndex++;
@@ -95,8 +97,7 @@ void updateGameObjects(Time time, GameObjectManager* gameObjectManager)
 	}
 }
 
-void InitGameObject(GameObject* gameObject, void (*onUpdate)(Time, GameObject*),
-void (*onFixedUpdate)(Time, GameObject*))
+void InitGameObject(GameObject* gameObject)
 {
 	gameObject->id = 0;
 	gameObject->name = NULL;
@@ -104,26 +105,33 @@ void (*onFixedUpdate)(Time, GameObject*))
 	initMesh(&gameObject->mesh);
 	initRigidBody(&gameObject->rigidBody);
 	gameObject->debug = false;
+	gameObject->OnStart = NULL;
+	gameObject->OnUpdate = NULL;
+	gameObject->OnFixedUpdate = NULL;
+}
 
-	gameObject->onUpdate = onUpdate;
-	gameObject->onFixedUpdate = onFixedUpdate;
+void SetupCallbacks(GameObject* gameObject, OnStart OnStart, OnUpdate OnUpdate, OnFixedUpdate OnFixedUpdate)
+{
+	gameObject->OnStart = OnStart;
+	gameObject->OnUpdate = OnUpdate;
+	gameObject->OnFixedUpdate = OnFixedUpdate;
 }
 
 void updateGameObject(Time time, GameObject* gameObject)
 {
 	glPushMatrix();
 
-	if(gameObject->onUpdate != NULL) gameObject->onUpdate(time, gameObject);
+	if (gameObject->OnUpdate != NULL) gameObject->OnUpdate(time, gameObject);
 
 	Mesh* mesh = &gameObject->mesh;
-	
+
 	updateTransform(time, &gameObject->transform);
 
 	updateMesh(time, mesh);
 
-	if(gameObject->debug)
+	if (gameObject->debug)
 		drawGizmos(time, mesh->maxPosition);
-	
+
 	glPopMatrix();
 }
 

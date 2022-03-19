@@ -10,6 +10,6 @@
 
 extern GameObject cube;
 
-void OnCubeStart(GameObject* gameObject);
+OnStart OnCubeStart(GameObject* gameObject);
 
-void OnCubeUpdate(Time time, GameObject* gameObject);
+OnUpdate OnCubeUpdate(Time time, GameObject* gameObject);

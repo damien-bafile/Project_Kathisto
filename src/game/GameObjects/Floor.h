@@ -8,8 +8,8 @@
 #include "math/mathUtils.h"
 
 
-extern GameObject floor;
+extern GameObject floorGameObject;
 
-void OnFloorStart(GameObject *gameObject);
-void OnFloorUpdate(Time time, GameObject* gameObject);
-void OnFloorFixedUpdate(Time time, GameObject* gameObject)
+OnStart OnFloorStart(GameObject *gameObject);
+OnUpdate OnFloorUpdate(Time time, GameObject* gameObject);
+OnFixedUpdate OnFloorFixedUpdate(Time time, GameObject* gameObject);

@@ -72,14 +72,20 @@ void initialiseWindow(int* argc, char** argv, char* windowName)
 	// setup game object manager
 	InitGameObjectManager(&gameObjectManager);
 
+	InitGameObject(&cube);
+	InitGameObject(&floorGameObject);
+
+	SetupCallbacks(&cube, OnCubeStart, OnCubeUpdate, NULL);
+	SetupCallbacks(&floorGameObject, OnFloorStart, OnFloorUpdate, NULL);
+
 	gameObjectManagerAdd(&gameObjectManager, cube);
-	gameObjectManagerAdd(&gameObjectManager, floor);
+	gameObjectManagerAdd(&gameObjectManager, floorGameObject);
 
 
 	for (size_t i = 0; i < gameObjectManager.lastIndex; i++)
 	{
-		if (gameObjectManager.gameObjects[i].onStart != NULL)
-			gameObjectManager.gameObjects[i].onStart(&gameObjectManager.gameObjects[i]);
+		if (gameObjectManager.gameObjects[i].OnStart != NULL)
+			gameObjectManager.gameObjects[i].OnStart(&gameObjectManager.gameObjects[i]);
 	}
 
 	// enter loop

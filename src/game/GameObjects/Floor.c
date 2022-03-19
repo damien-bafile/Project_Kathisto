@@ -1,6 +1,6 @@
 #include "Floor.h"
 
-GameObject floor = {.onStart = &OnFloorStart};
+GameObject floorGameObject = {0};
 
 // position of each of the ground points
 const Vector3 floorVertexBuffer[] = {
@@ -29,18 +29,16 @@ const Mesh floorMesh = {
 	.colors = floorColorBuffer,
 	.isUniformColor = true };
 
-void OnFloorStart(GameObject* gameObject)
+OnStart OnFloorStart(GameObject* gameObject)
 {
-	InitGameObject(gameObject, &OnFloorUpdate, &OnFloorFixedUpdate);
-
 	gameObject->mesh = floorMesh;
 	gameObject->transform.scale = (Vector3){ 100.0f, 1.0f, 100.0f };
 	calculateMeshBoundBox(&gameObject->mesh);
 }
 
-void OnFloorUpdate(Time time, GameObject* gameObject)
+OnUpdate OnFloorUpdate(Time time, GameObject* gameObject)
 {
 }
 
-void OnFloorFixedUpdate(Time time, GameObject* gameObject)
+OnFixedUpdate OnFloorFixedUpdate(Time time, GameObject* gameObject)
 {}

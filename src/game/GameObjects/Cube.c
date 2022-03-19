@@ -1,6 +1,6 @@
 #include "Cube.h"
 
-GameObject cube = {.onStart = &onCubeStart, .onUpdate = &onCubeUpdate};
+GameObject cube = {0};
 
 const Vector3 cubeVertexBuffer[] = {
 	{ -1.0f, -1.0f, -1.0f },
@@ -59,8 +59,10 @@ Mesh cubeMesh = {
 	.debug = false
 };
 
-void onCubeStart(GameObject* gameObject)
+OnStart OnCubeStart(GameObject* gameObject)
 {
+	InitGameObject(gameObject, &OnCubeUpdate, NULL);
+
 	gameObject->name = "cube";
 
 	gameObject->mesh = cubeMesh;
@@ -68,11 +70,9 @@ void onCubeStart(GameObject* gameObject)
 
 	gameObject->transform.position = (Vector3){ 5.0f, 4.0f, 0.0f };
 	gameObject->transform.scale = (Vector3){ 1.0f, 1.0f, 1.0f };
-
-	gameObject->onUpdate = &onCubeUpdate;
-
 }
-void onCubeUpdate(Time time, GameObject* gameObject)
+
+OnUpdate OnCubeUpdate(Time time, GameObject* gameObject)
 {
 	Vector3* pos = &gameObject->transform.position;
 
