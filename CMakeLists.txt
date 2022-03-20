@@ -14,7 +14,7 @@ find_package(OpenGL REQUIRED)
 add_subdirectory(src)
 
 # Add source to this project's executable.
-add_executable(${PROJECT_NAME} ${SOURCES})
+add_executable(${PROJECT_NAME} ${SOURCES} "src/game/GameObjects/Cube2.h" "src/game/GameObjects/Cube2.c")
 
 # include lib
 add_subdirectory(lib)
