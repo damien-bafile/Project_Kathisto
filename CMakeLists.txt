@@ -4,7 +4,7 @@
 cmake_minimum_required (VERSION 3.8)
 
 
-set(PROJECT_NAME Project_Kathisto)
+set(PROJECT_NAME Lab)
 project(${PROJECT_NAME} LANGUAGES C)
 
 find_package(OpenGL REQUIRED)
@@ -13,7 +13,7 @@ add_subdirectory(src)
 
 
 # Add source to this project's executable.
-add_executable(Project_Kathisto ${SOURCES})
+add_executable(${PROJECT_NAME} ${SOURCES})
 
 add_subdirectory(lib)
 
